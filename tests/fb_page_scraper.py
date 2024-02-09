@@ -1,22 +1,12 @@
-from bs4 import BeautifulSoup
-import requests
+from facebook_page_info_scraper import FacebookPageInfoScraper
 
-website='https://www.facebook.com/POSTADurango'
-response = requests.get(website)
-content = response.text
+ # providing the page URL
+page_url = 'https://www.facebook.com/POSTADurango'
 
-soup = BeautifulSoup(content, 'lxml')
-bdy = soup.find('body')
-print(bdy.prettify())
+ # Create an instance of the scraper
+scraper = FacebookPageInfoScraper(link=page_url)
 
+page_info = scraper.get_page_info()
 
-from facebook_scraper import get_posts
-
-posts = get_posts('POSTA Durango', pages= 10)
-
-for post in posts:
-    print(post)
-
-
-
-
+ # Print page details
+print(page_info)
