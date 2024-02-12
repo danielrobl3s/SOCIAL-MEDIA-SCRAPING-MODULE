@@ -14,4 +14,6 @@ title = box.find('h1').get_text()
 
 fullScript = box.find('div', class_ = 'full-script').get_text(strip=True, separator=' ')
 
-print(fullScript)
+with open('Titanic.txt', 'w') as file:
+    file.write(fullScript)
+    
