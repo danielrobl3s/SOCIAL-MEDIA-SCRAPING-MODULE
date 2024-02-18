@@ -7,7 +7,7 @@ username = input('Tell me your email: ')
 password = input('Tell me your password: ')
 
 #Create the web driver to GET request this facebook page:
-website = 'https://www.facebook.com/POSTADurango'
+website = 'https://www.instagram.com/postadurango/'
 driver = webdriver.Chrome()
 driver.get(website)
 
