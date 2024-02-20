@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from bs4 import BeautifulSoup
+import csv
 import re
 import time
 
@@ -27,18 +28,29 @@ pw = driver.find_element(By.XPATH, '//input[(@aria-invalid="false") and (@name="
 login = driver.find_element(By.XPATH, '//div[@class="x1c436fg"]/div[(@aria-label="Accessible login button") and (@role="button")]')
 login.click()
 
+time.sleep(60)
+
 soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-time.sleep(20)
-    
-#find titles of the posts:
-titles = driver.find_elements(By.XPATH, '//div[@data-pagelet="ProfileTimeline"]//div[(@dir="auto") and (@style="text-align: start;")]')
+posts = soup.find_all('div', {'style':'text-align: start;'})
 
-with open('outputFB.csv', 'w', encoding='utf-8') as f:
-    f.write('title,reactions,coments,share \n')
-    for title in titles:
-        print("--------titulo nuevo-----------------")
-        print(title.text)
-        f.write(str(title.text))
+#//div[(@data-visualcompletion="ignore-dynamic") and (@class="x168nmei x13lgxp2 x30kzoy x9jhf4c x6ikm8r x10wlt62")]
+reactions = soup.find_all('span', {'class':'x1e558r4'})
+comments = posts.find_all('')
+shares = posts.find_all('')
+
+with open('test.html', 'w', encoding='utf-8') as f:
+    f.write(str(posts))
+
+with open('postsFB.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    fieldnames = ['title', 'reactions', 'comments', 'shares']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    
+# Iterate over each post
+    for post in posts:
+        # Write data to CSV
+        writer.writerow({'title': post.text, 'reactions': reactions.text, 'comments': comments.text, 'shares': shares.text})
+
 
 
