@@ -32,25 +32,25 @@ time.sleep(60)
 
 soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-posts = soup.find_all('div', {'style':'text-align: start;'})
-#Extract text from every element of the resultset object thrown by beautiful soup
-titles = [element.get_text(strip=True) for element in posts]
+posts = driver.find_elements(By.XPATH, '//div[@style="text-align: start;"]')
+titles = [element.text for element in posts]
 
-reacts = soup.find_all('span', {'class':'x1e558r4'})
-#Extract text but from reactions resultset
-reactions = [element.get_text(strip=True) for element in reacts]
+reacts = driver.find_elements(By.XPATH, '//span[@class="x1e558r4"]')
+reactions = [element.text for element in reacts]
 
-comments = soup.find_all('div', {'data-visualcompletion':'ignore-dynamic', 'class':'x168nmei x13lgxp2 x30kzoy x9jhf4c x6ikm8r x10wlt62'})
-shares = '' #soup.find_all('')
+coments = driver.find_elements(By.XPATH, '//div[@class="x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w xeuugli xg83lxy x1h0ha7o x10b6aqq x1yrsyyn"]')
+comments = [element.text for element in coments]
 
-""" with open('test.html', 'w', encoding='utf-8') as f:
-    f.write(str(reactions)) """
+share = driver.find_elements(By.XPATH, '(//div[@class="x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w xeuugli xg83lxy x1h0ha7o x10b6aqq x1yrsyyn"]//span)[position() mod 2 = 0]')
+shares = [element.text for element in share]
+
+print(shares)
 
 with open('postsFB.csv', 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = ['title', 'reactions', 'comments', 'shares']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
 
-    for data in zip(titles, reactions):
-        writer.writerow({"title": data[0], "reactions": data[1]})
+    for data in zip(titles, reactions, comments):
+        writer.writerow({"title": data[0], "reactions": data[1], "comments": data[2]})
     
