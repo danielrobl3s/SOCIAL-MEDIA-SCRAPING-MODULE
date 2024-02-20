@@ -33,24 +33,24 @@ time.sleep(60)
 soup = BeautifulSoup(driver.page_source, 'html.parser')
 
 posts = soup.find_all('div', {'style':'text-align: start;'})
+#Extract text from every element of the resultset object thrown by beautiful soup
+titles = [element.get_text(strip=True) for element in posts]
 
-#//div[(@data-visualcompletion="ignore-dynamic") and (@class="x168nmei x13lgxp2 x30kzoy x9jhf4c x6ikm8r x10wlt62")]
-reactions = soup.find_all('span', {'class':'x1e558r4'})
-comments = posts.find_all('')
-shares = posts.find_all('')
+reacts = soup.find_all('span', {'class':'x1e558r4'})
+#Extract text but from reactions resultset
+reactions = [element.get_text(strip=True) for element in reacts]
 
-with open('test.html', 'w', encoding='utf-8') as f:
-    f.write(str(posts))
+comments = soup.find_all('div', {'data-visualcompletion':'ignore-dynamic', 'class':'x168nmei x13lgxp2 x30kzoy x9jhf4c x6ikm8r x10wlt62'})
+shares = '' #soup.find_all('')
+
+""" with open('test.html', 'w', encoding='utf-8') as f:
+    f.write(str(reactions)) """
 
 with open('postsFB.csv', 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = ['title', 'reactions', 'comments', 'shares']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
+
+    for data in zip(titles, reactions):
+        writer.writerow({"title": data[0], "reactions": data[1]})
     
-# Iterate over each post
-    for post in posts:
-        # Write data to CSV
-        writer.writerow({'title': post.text, 'reactions': reactions.text, 'comments': comments.text, 'shares': shares.text})
-
-
-
