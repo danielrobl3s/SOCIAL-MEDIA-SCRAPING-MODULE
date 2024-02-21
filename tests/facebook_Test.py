@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
-username = input('Tell me your email: ')
-password = input('Tell me your password: ')
+username = 'dudedeveloper08@gmail.com' #input('Tell me your email: ')
+password = 'Este es el correo del dude developer 89' #input('Tell me your password: ')
 
 #Create the web driver to GET request this facebook page:
 website = 'https://www.facebook.com/POSTADurango'
