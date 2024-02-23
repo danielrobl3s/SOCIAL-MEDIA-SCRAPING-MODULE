@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
-username = input('Tell me your email: ')
-password = input('Tell me your password: ')
+username = 'dudedeveloper08@gmail.com'
+password = 'Obaboyamamamama0987654321'
 
 #Create the web driver to GET request this facebook page:
 website = 'https://www.instagram.com/postadurango/'
@@ -15,18 +15,20 @@ driver.get(website)
 
 driver.implicitly_wait(60) #wait 60 seconds or until everything is found
 
-try:
-    #Get email and password from the facebook login popup to later send them
-    email = driver.find_element(By.XPATH, '//input[@class="x1i10hfl xggy1nq x1s07b3s x1kdt53j x1a2a7pz xjbqb8w x76ihet xwmqs3e x112ta8 xxxdfa6 x9f619 xzsf02u x1uxerd5 x1fcty0u x132q4wb x1a8lsjc x1pi30zi x1swvt13 x9desvi xh8yej3 x15h3p50 x10emqs4"]').send_keys(username)
-    pw = driver.find_element(By.XPATH, '//input[(@aria-invalid="false") and (@name="pass")]').send_keys(password)
-    login = driver.find_element(By.XPATH, '//div[@class="x1c436fg"]/div[(@aria-label="Accessible login button") and (@role="button")]')
-    login.click()
+login_button = driver.find_element(By.XPATH, '//a[@class="x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w x972fbf xcfux6l x1qhh985 xm0m39n xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x18d9i69 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1lq5wgf xgqcy7u x30kzoy x9jhf4c x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x9bdzbf x1ypdohk x1f6kntn xwhw2v2 x10w6t97 xl56j7k x17ydfre x1swvt13 x1pi30zi x1n2onr6 x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye x1tu34mt xzloghq xe81s16 x3nfvp2"]')
+login_button.click()
 
-    time.sleep(20)
-    feed = driver.find_element(By.XPATH, '//div[@data-pagelet="ProfileTimeline"]')
-except:
-    print("Algo salió mal, checa si los elementos son interactivos o si estan bien identificados")
+time.sleep(5)
 
+username = driver.find_element(By.XPATH, '//input[@type="text"]').send_keys(username)
+password = driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(password)
 
-with open('outputFB.txt', 'w', encoding='UTF-8') as f:
-    f.write(feed.text)
+submit_button = driver.find_element(By.XPATH, '//button[@class=" _acan _acap _acas _aj1- _ap30"]')
+submit_button.click()
+
+time.sleep(10)
+
+not_now_button = driver.find_element(By.XPATH, '//div[@role="button"]')
+not_now_button.click()
+
+time.sleep(30)
