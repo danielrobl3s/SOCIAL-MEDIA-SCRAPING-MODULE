@@ -8,12 +8,13 @@ import csv
 import re
 import time
 
-username = input('Tell me your email: ')
-password = input('Tell me your password: ')
+username = 'dudedeveloper08@gmail.com'
+password = 'Este es el correo del dude developer 89'
 text = ''
 
 #Create the web driver to GET request this facebook page:
-website = 'https://www.facebook.com/POSTADurango'
+website = input('Introduce the website to be scraped: ')
+name = input('Name your csv file: ')
 driver = webdriver.Chrome()
 driver.get(website)
 
@@ -28,29 +29,36 @@ pw = driver.find_element(By.XPATH, '//input[(@aria-invalid="false") and (@name="
 login = driver.find_element(By.XPATH, '//div[@class="x1c436fg"]/div[(@aria-label="Accessible login button") and (@role="button")]')
 login.click()
 
-time.sleep(60)
+time.sleep(30)
 
 soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-posts = driver.find_elements(By.XPATH, '//div[@style="text-align: start;"]')
+ 
+posts = driver.find_elements(By.XPATH, '//div[@data-pagelet="ProfileTimeline"]/div//div[@class="x1iorvi4 x1pi30zi x1l90r2v x1swvt13"]/*')
 titles = [element.text for element in posts]
 
-reacts = driver.find_elements(By.XPATH, '//span[@class="x1e558r4"]')
+
+reacts = driver.find_elements(By.XPATH, '//div[@class="x6s0dn4 xi81zsa x78zum5 x6prxxf x13a6bvl xvq8zen xdj266r xktsk01 xat24cr x1d52u69 x889kno x4uap5 x1a8lsjc xkhd6sd xdppsyt"]//span[@class="xt0b8zv x1e558r4"]')
 reactions = [element.text for element in reacts]
 
-coments = driver.find_elements(By.XPATH, '//div[@class="x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w xeuugli xg83lxy x1h0ha7o x10b6aqq x1yrsyyn"]')
-comments = [element.text for element in coments]
+comments_and_shares = driver.find_elements(By.XPATH, '//div[@class="x6s0dn4 xi81zsa x78zum5 x6prxxf x13a6bvl xvq8zen xdj266r xktsk01 xat24cr x1d52u69 x889kno x4uap5 x1a8lsjc xkhd6sd xdppsyt"]//div[@class="x1i10hfl x1qjc9v5 xjqpnuy xa49m3k xqeqjp1 x2hbi6w x1ypdohk xdl72j9 x2lah0s xe8uvvx x2lwn1j xeuugli x1hl2dhg xggy1nq x1t137rt x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x3nfvp2 x1q0g3np x87ps6o x1a2a7pz xjyslct xjbqb8w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1heor9g xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1ja2u2z xt0b8zv"]')
+comments_shares = [element.text for element in comments_and_shares]
+shares = comments_shares[::2]
 
-share = driver.find_elements(By.XPATH, '(//div[@class="x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w xeuugli xg83lxy x1h0ha7o x10b6aqq x1yrsyyn"]//span)[position() mod 2 = 0]')
-shares = [element.text for element in share]
+print(comments_shares, shares)
 
-print(shares)
+""" coments = driver.find_elements(By.XPATH, '//div[@class="x6s0dn4 xi81zsa x78zum5 x6prxxf x13a6bvl xvq8zen xdj266r xktsk01 xat24cr x1d52u69 x889kno x4uap5 x1a8lsjc xkhd6sd xdppsyt"]//div[@id=":r1nc:"]//span')
+comments = [element.text for element in coments] """
 
-with open('postsFB.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['title', 'reactions', 'comments', 'shares']
+""" share = driver.find_elements(By.XPATH, '(/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div[3]/div[1]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div[4]/div/div/div[1]/div/div[1]/div/div[2]/div[3]/span/div/div/div[1]/span')
+shares = [element.text for element in share] """
+
+
+with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    fieldnames = ['title', 'reactions', 'comments']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
+    
 
-    for data in zip(titles, reactions, comments):
-        writer.writerow({"title": data[0], "reactions": data[1], "comments": data[2]})
+    for data in zip(titles, reactions):
+        writer.writerow({"title": data[0], "reactions": data[1]})
     
