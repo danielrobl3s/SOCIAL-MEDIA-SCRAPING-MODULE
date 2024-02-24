@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from bs4 import BeautifulSoup
 import time
 
 username = 'dudedeveloper08@gmail.com'
@@ -26,9 +27,18 @@ password = driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(
 submit_button = driver.find_element(By.XPATH, '//button[@class=" _acan _acap _acas _aj1- _ap30"]')
 submit_button.click()
 
-time.sleep(10)
+time.sleep(3)
 
 not_now_button = driver.find_element(By.XPATH, '//div[@role="button"]')
 not_now_button.click()
 
-time.sleep(30)
+time.sleep(60)
+
+getlinks = driver.find_elements(By.XPATH, '//div[@class="_ac7v xzboxd6 xras4av xgc1b0m"]/div/a')
+links = [element.get_attribute('href') for element in getlinks]
+
+
+
+with open("testIG.html", 'w', encoding='utf-8') as file:
+    for link in links:
+        file.write(f'{link} \n')
