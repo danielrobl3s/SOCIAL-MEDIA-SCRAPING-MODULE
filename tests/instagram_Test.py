@@ -12,14 +12,15 @@ total_titles = []
 total_likes = []
 comments = []
 
-#Create the web driver to GET request this facebook page:
-website = 'https://www.instagram.com/postadurango/'
+#Create the web driver to GET request this instagram page https://www.instagram.com/postadurango:
+website = input('Introduce el link de la pagina de instagram: ')
+name = input('nombra tu archivo .csv: ')
 driver = webdriver.Chrome()
 driver.get(website)
 
 #We make driver wait until all elements are on screen
 
-driver.implicitly_wait(60) #wait 60 seconds or until everything is found
+driver.implicitly_wait(20) #wait 60 seconds or until everything is found
 
 login_button = driver.find_element(By.XPATH, '//a[@class="x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w x972fbf xcfux6l x1qhh985 xm0m39n xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x18d9i69 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1lq5wgf xgqcy7u x30kzoy x9jhf4c x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x9bdzbf x1ypdohk x1f6kntn xwhw2v2 x10w6t97 xl56j7k x17ydfre x1swvt13 x1pi30zi x1n2onr6 x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye x1tu34mt xzloghq xe81s16 x3nfvp2"]')
 login_button.click()
@@ -53,7 +54,7 @@ for link in links:
     go_back.click()
     time.sleep(3)
 
-with open('postsIG.csv', 'w', encoding='utf-8') as file:
+with open(f'{name}.csv', 'w', encoding='utf-8') as file:
     fieldnames = ['Title', 'Likes', 'Comments']
     writer = csv.DictWriter(file, fieldnames=fieldnames)
     writer.writeheader()
