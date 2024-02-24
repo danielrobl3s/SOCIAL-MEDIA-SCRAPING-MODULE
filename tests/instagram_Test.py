@@ -7,6 +7,10 @@ import time
 username = 'dudedeveloper08@gmail.com'
 password = 'Obaboyamamamama0987654321'
 
+total_titles = []
+total_likes = []
+comments = []
+
 #Create the web driver to GET request this facebook page:
 website = 'https://www.instagram.com/postadurango/'
 driver = webdriver.Chrome()
@@ -34,11 +38,16 @@ not_now_button.click()
 
 time.sleep(60)
 
-getlinks = driver.find_elements(By.XPATH, '//div[@class="_ac7v xzboxd6 xras4av xgc1b0m"]/div/a')
-links = [element.get_attribute('href') for element in getlinks]
+links = driver.find_elements(By.XPATH, '//div[@class="_ac7v xzboxd6 xras4av xgc1b0m"]/div/a')
 
+for link in links:
+    link.click()
+    title = driver.find_element(By.XPATH, '//span[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]//span[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
+    total_titles.append(title)
+    like = driver.find_element(By.XPATH, '//div[@class="x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz"]//span[@class="html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs"]').text
+    total_likes.append(like)
+    go_back = driver.find_element(By.XPATH, '//div[@class="x10l6tqk x1nc75zl xi3dyvs x1mywscw"]/div')
+    go_back.click()
+    time.sleep(3)
 
-
-with open("testIG.html", 'w', encoding='utf-8') as file:
-    for link in links:
-        file.write(f'{link} \n')
+print(total_titles, total_likes)
