@@ -8,12 +8,12 @@ import csv
 import re
 import time
 
-username = input('Tell me your email: ')
-password = input('Tell me your password: ')
+username = 'dudedeveloper08@gmail.com'
+password = 'Este es el correo del dude developer 89'
 text = ''
 
 #Create the web driver to GET request this facebook page:
-website = 'https://www.facebook.com/POSTADurango'
+website = 'https://www.facebook.com/Contactohoy'
 driver = webdriver.Chrome()
 driver.get(website)
 
@@ -30,9 +30,19 @@ login.click()
 
 time.sleep(60)
 
-soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-posts = driver.find_elements(By.XPATH, '//div[@style="text-align: start;"]')
+feed = driver.find_element(By.XPATH, '//div[@data-pagelet="ProfileTimeline"]')
+
+with open('postsFB.txt', 'w', newline='', encoding='utf-8') as txtfile:
+    txtfile.write(feed.text)
+
+
+
+
+
+
+
+""" posts = driver.find_elements(By.XPATH, '//div[@style="text-align: start;"]')
 titles = [element.text for element in posts]
 
 reacts = driver.find_elements(By.XPATH, '//span[@class="x1e558r4"]')
@@ -52,5 +62,5 @@ with open('postsFB.csv', 'w', newline='', encoding='utf-8') as csvfile:
     writer.writeheader()
 
     for data in zip(titles, reactions, comments):
-        writer.writerow({"title": data[0], "reactions": data[1], "comments": data[2]})
+        writer.writerow({"title": data[0], "reactions": data[1], "comments": data[2]}) """
     
