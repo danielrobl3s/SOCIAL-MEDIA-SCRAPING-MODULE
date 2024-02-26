@@ -54,8 +54,7 @@ for comment in comments_and_shares:
 with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = ['title', 'reactions', 'comments', 'shares']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()
-    
+    writer.writeheader()    
 
     for data in zip(titles, reactions, comments, shares):
         writer.writerow({"title": data[0], "reactions": data[1], "comments": data[2], "shares": data[3]})
