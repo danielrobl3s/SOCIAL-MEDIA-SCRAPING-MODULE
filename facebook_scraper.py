@@ -10,10 +10,10 @@ import time
 
 username = 'dudedeveloper08@gmail.com'
 password = 'Este es el correo del dude developer 89'
-text = ''
+prefix = 'https://www.facebook.com/'
 
 #Create the web driver to GET request this facebook page:
-website = input('Introduce the website to be scraped: ')
+website = prefix + input('Introduce the website to be scraped: ')
 name = input('Name your csv file: ')
 driver = webdriver.Chrome()
 driver.get(website)
