@@ -12,10 +12,22 @@ username = 'dudedeveloper08@gmail.com'
 password = 'Este es el correo del dude developer 89'
 prefix = 'https://www.facebook.com/'
 
+#Scroll function
+def scroll():
+    scroll_origin = ScrollOrigin.from_viewport(10, 10)
+
+    ActionChains(driver)\
+        .scroll_from_origin(scroll_origin, 0, 10000)\
+        .perform()
+
 #Create the web driver to GET request this facebook page:
 website = prefix + input('Introduce the website to be scraped: ')
 name = input('Name your csv file: ')
-driver = webdriver.Chrome()
+
+chrome_options = webdriver.ChromeOptions()
+prefs = {"profile.default_content_setting_values.notifications" : 2}
+chrome_options.add_experimental_option("prefs",prefs)
+driver = webdriver.Chrome(options=chrome_options)
 driver.get(website)
 
 #We make driver wait until all elements are on screen
@@ -29,7 +41,9 @@ pw = driver.find_element(By.XPATH, '//input[(@class="x1i10hfl xggy1nq x1s07b3s x
 login = driver.find_element(By.XPATH, '//div[@class="x1c436fg"]/div[(@aria-label="Accessible login button") and (@role="button")]')
 login.click()
 
-time.sleep(30)
+time.sleep(10)
+
+scroll()
 
 soup = BeautifulSoup(driver.page_source, 'html.parser')
  
