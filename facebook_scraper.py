@@ -12,6 +12,8 @@ import time
 username = 'dudedeveloper08@gmail.com'
 password = 'Este es el correo del dude developer 89'
 prefix = 'https://www.facebook.com/'
+texts = []
+images = []
 
 #Scroll function
 def scroll():
@@ -23,7 +25,7 @@ def scroll():
 
 #Create the web driver to GET request this facebook page:
 website = prefix + input('Introduce the website to be scraped: ')
-#name = input('Name your csv file: ')
+name = input('Name your csv file: ')
 
 chrome_options = webdriver.ChromeOptions()
 prefs = {"profile.default_content_setting_values.notifications" : 2}
@@ -42,9 +44,9 @@ pw = driver.find_element(By.XPATH, '//input[(@class="x1i10hfl xggy1nq x1s07b3s x
 login = driver.find_element(By.XPATH, '//div[@class="x1c436fg"]/div[(@aria-label="Accessible login button") and (@role="button")]')
 login.click()
 
-time.sleep(10)
+time.sleep(60)
 
-scroll()
+#scroll()
 
 soup = BeautifulSoup(driver.page_source, 'html.parser')
  
@@ -58,25 +60,30 @@ reactions = [element.text for element in reacts]
 parent_div = driver.find_elements(By.XPATH, '//div[@class="x9f619 x1n2onr6 x1ja2u2z x78zum5 x2lah0s x1qughib x1qjc9v5 xozqiw3 x1q0g3np xykv574 xbmpl8g x4cne27 xifccgj"]')
 
 for parent in parent_div:
-
+   
+   try:
     text_span = parent.find_elements(By.XPATH, './/span')
-    texts = [element.text for element in text_span]
+    for element in text_span:
+       texts.append(element.text)
+   except:
+        texts.append('No element')
 
+   try:
     image_tag = parent.find_elements(By.XPATH, './/i')
-    images = [element.get_attribute("style")for element in image_tag]
+    for element in image_tag:
+         images.append(element.get_attribute("style"))
+   except:
+      images.append("No element")
 
-    print(titles, reactions, texts, images, len(titles), len(reactions), len(texts), len(images))
+print(titles, reactions, texts, images, len(titles), len(reactions), len(texts), len(images))
 
-
-""" comments_and_shares = driver.find_elements(By.XPATH, '//div[@class="x6s0dn4 xi81zsa x78zum5 x6prxxf x13a6bvl xvq8zen xdj266r xktsk01 xat24cr x1d52u69 x889kno x4uap5 x1a8lsjc xkhd6sd xdppsyt"]//div[@class="x1i10hfl x1qjc9v5 xjqpnuy xa49m3k xqeqjp1 x2hbi6w x1ypdohk xdl72j9 x2lah0s xe8uvvx x2lwn1j xeuugli x1hl2dhg xggy1nq x1t137rt x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x3nfvp2 x1q0g3np x87ps6o x1a2a7pz xjyslct xjbqb8w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1heor9g xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1ja2u2z xt0b8zv"]')
-comments_shares = [element.text for element in comments_and_shares]
 shares = []
-comments = comments_shares[::2]
+comments = texts[::2]
 
 index = 0
-for comment in comments_and_shares:    
+for comment in texts:    
     if index%2 != 0:
-        shares.append(comment.text)
+        shares.append(comment)
     index += 1
 
 with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
@@ -86,4 +93,3 @@ with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
 
     for data in zip(titles, reactions, comments, shares):
         writer.writerow({"title": data[0], "reactions": data[1], "comments": data[2], "shares": data[3]})
-     """
