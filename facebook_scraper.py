@@ -62,7 +62,7 @@ parent_div = driver.find_elements(By.XPATH, '//div[@class="x9f619 x1n2onr6 x1ja2
 for parent in parent_div:
    
    try:
-    text_span = parent.find_elements(By.XPATH, './/span')
+    text_span = parent.find_elements(By.XPATH, './/span[@class="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa"]')
     for element in text_span:
        texts.append(element.text)
    except:
