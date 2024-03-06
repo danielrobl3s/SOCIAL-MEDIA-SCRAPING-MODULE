@@ -11,11 +11,16 @@ password = 'Obaboyamamamama0987654321'
 total_titles = []
 total_likes = []
 comments = []
+prefix = 'https://www.instagram.com/'
 
 #Create the web driver to GET request this instagram page https://www.instagram.com/postadurango:
-website = input('Introduce el link de la pagina de instagram: ')
+website = prefix + input('Introduce el nombre de la pagina de instagram: ')
 name = input('nombra tu archivo .csv: ')
-driver = webdriver.Chrome()
+
+chrome_options = webdriver.ChromeOptions()
+prefs = {"profile.default_content_setting_values.notifications" : 2}
+chrome_options.add_experimental_option("prefs",prefs)
+driver = webdriver.Chrome(options=chrome_options)
 driver.get(website)
 
 #We make driver wait until all elements are on screen
