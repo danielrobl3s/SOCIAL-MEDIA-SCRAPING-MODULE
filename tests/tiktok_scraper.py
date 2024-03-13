@@ -11,10 +11,11 @@ import time
 
 username = "dudedeveloper08@gmail.com"
 password = "Obaboyamama@12"
-prefix = "https://www.tiktok.com/"
+prefix = "https://www.tiktok.com/@"
+titles = []
 
 website = prefix + input('Introduce la cuenta de tiktok a la que quieres acceder: ')
-name = input('Nombra tu archivo .csv: ')
+#name = input('Nombra tu archivo .csv: ')
 
 chrome_options = webdriver.ChromeOptions()
 prefs = {"profile.default_content_setting_values.notifications" : 2}
@@ -43,3 +44,16 @@ submit = driver.find_element(By.XPATH, '//button[@data-e2e="login-button"]')
 submit.click()
 
 time.sleep(30)
+
+posts = driver.find_elements(By.XPATH, '//div[@class="css-x6y88p-DivItemContainerV2 e19c29qe8"]')
+
+for post in posts:
+    post.click()
+    title = driver.find_element(By.XPATH, '//div[@class="css-1nst91u-DivMainContent e1mecfx01"]').text
+    titles.append(title)
+
+    close = driver.find_element(By.XPATH, '//button[@aria-label="Close"]')
+    close.click()
+
+
+print(titles)
