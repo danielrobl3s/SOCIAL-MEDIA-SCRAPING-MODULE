@@ -36,6 +36,9 @@ This module consists of 3 specific files: facebook_scraper.py, instagram_scraper
 To get each to work, simply run via command line:
 
 ##Facebook:
+(WARNING) this scraper is the most problematic one since facebook suffered from data privacy lawsuits and is often updating their platform to make facebook a scraping-hostile platform, with this in mind, the .csv scraper might be wack specially with small facebook pages with few interactions, for a more precise result use:
+
+
 `py facebook_scraper.py`
 
 You'll be asked to prompt the facebook page subdomain:
