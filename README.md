@@ -15,7 +15,7 @@ Download chromedriver at: https://googlechromelabs.github.io/chrome-for-testing/
 
 (latest stable version you can find)
 
-save it anywhere you want:
+save it whereever you want:
 
 ![alt text](image-2.png)
 
