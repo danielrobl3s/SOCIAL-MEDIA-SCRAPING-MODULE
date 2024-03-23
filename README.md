@@ -22,6 +22,6 @@ You'll be asked to prompt the facebook page subdomain:
 `$Introduce the website to be scraped: `
 Enter the facebook subdomain (facebook page) you want to scrape:
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 
