@@ -19,6 +19,9 @@ save it whereever you want:
 
 ![alt text](image-2.png)
 
+after that, make sure to add the path to chromedriver to your environment variables:
+
+![alt text](image-3.png)
 
 ###Data collecting module:
 
