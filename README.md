@@ -23,6 +23,12 @@ after that, make sure to add the path to chromedriver to your environment variab
 
 ![alt text](image-4.png)
 
+if you're currently having troubles with chromedrive related issues, please refer to chromedriver page troubleshooting section at: https://chromedriver.chromium.org/home#h.p_ID_60
+
+
+
+
+
 ###Data collecting module:
 
 This module consists of 3 specific files: facebook_scraper.py, instagram_scraper.py and tiktok_scraper.py
