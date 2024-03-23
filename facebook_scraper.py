@@ -49,10 +49,9 @@ time.sleep(60)
 #scroll()
 
 soup = BeautifulSoup(driver.page_source, 'html.parser')
- 
-posts = driver.find_elements(By.XPATH, '//div[@data-pagelet="ProfileTimeline"]/div//div[@class="x1iorvi4 x1pi30zi x1l90r2v x1swvt13"]/*')
-titles = [element.text for element in posts]
 
+posts = driver.find_elements(By.XPATH, '//div[@class="xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs x126k92a"]')
+titles = [element.text for element in posts]
 
 reacts = driver.find_elements(By.XPATH, '//span[(@aria-hidden) and (@class="xrbpyxo x6ikm8r x10wlt62 xlyipyv x1exxlbk")]')
 reactions = [element.text for element in reacts]
