@@ -7,31 +7,27 @@ from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 from nltk.stem import WordNetLemmatizer
 from nltk import FreqDist
-from gensim.models import Word2vec
+from gensim.models import Word2Vec
 import csv
 
-#Function to tokenize titles
-def turn_tokens(titles):
-    titles_length = []
-    title_tokens = []
-    most_common = []
-    new_list_title_no_stop_words = []
+def tokenize_and_train_word2vec(titles):
+    #Stopwords:
+    stop_words = stopwords.words('Spanish')
+    stop_words.append('.')
+    title_tokens = [word_tokenize(title.lower()) for title in titles]
 
-    for title in titles:
-        new_list_title = word_tokenize(title)
-        titles_length.append(len(new_list_title))
+    #titles length:
+    titles_length = [len(title) for title in title_tokens]
 
-        for word in new_list_title:
+    title_tokens_no_stopwords = [[word for word in title if word not in stop_words] for title in title_tokens]
 
-            if word not in stop_words:
-                new_list_title_no_stop_words.append(word)
+    # Train Word2Vec model
+    model = Word2Vec(sentences=title_tokens_no_stopwords, vector_size=100, window=5, min_count=1, workers=4)
+    
+    # Generate dense vectors for each token
+    token_vectors = [model.wv[word] for title in title_tokens_no_stopwords for word in title if word in model.wv]
 
-
-        fd = FreqDist(new_list_title_no_stop_words)
-        most_common.append(fd.most_common(3))
-        title_tokens.append(new_list_title_no_stop_words)
-        
-    return title_tokens, titles_length, 'MOST COMMON NEXT ----------------------------->', most_common
+    return token_vectors, titles_length
 
 
 #Get file and read it with pandas
@@ -41,14 +37,9 @@ df = pd.read_csv(your_file)
 #Get just the titles to apply nlp
 titles = df.iloc[:,0]
 
-#Stopwords:
-stop_words = stopwords.words('Spanish')
-stop_words.append('.')
+#Tokenize every title and return them as dense vector
+tokens = tokenize_and_train_word2vec(titles)
 
-#Tokenize every title
-tokens = turn_tokens(titles)
-
-print(str(len(titles)))
 print(tokens)
 
 
