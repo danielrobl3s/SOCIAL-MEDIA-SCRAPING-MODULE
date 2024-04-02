@@ -9,6 +9,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk import FreqDist
 from gensim.models import Word2Vec
 import csv
+from sklearn.decomposition import PCA
 
 def tokenize_and_train_word2vec(titles):
     #Stopwords:
@@ -38,9 +39,15 @@ df = pd.read_csv(your_file)
 titles = df.iloc[:,0]
 
 #Tokenize every title and return them as dense vector
-tokens = tokenize_and_train_word2vec(titles)
+tokens, titles_length = tokenize_and_train_word2vec(titles)
 
-print(tokens)
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=50)  # Adjust the number of components as needed
+reduced_tokens = pca.fit_transform(tokens)
+
+print('tokens with no stopwords and vectorized: ', tokens)
+print('reduced tokens shape: ', reduced_tokens)
+print('titles length (each)', titles_length)
 
 
 
