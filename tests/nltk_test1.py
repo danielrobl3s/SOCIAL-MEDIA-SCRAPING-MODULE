@@ -7,6 +7,7 @@ from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 from nltk.stem import WordNetLemmatizer
 from nltk import FreqDist
+from gensim.models import Word2vec
 import csv
 
 #Function to tokenize titles
