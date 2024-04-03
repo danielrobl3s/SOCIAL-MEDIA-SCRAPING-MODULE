@@ -10,6 +10,7 @@ from nltk import FreqDist
 from gensim.models import Word2Vec
 import csv
 from sklearn.decomposition import PCA
+from sentiment_analysis_spanish import sentiment_analysis
 
 def tokenize_and_train_word2vec(titles):
     #Stopwords:
@@ -22,13 +23,22 @@ def tokenize_and_train_word2vec(titles):
 
     title_tokens_no_stopwords = [[word for word in title if word not in stop_words] for title in title_tokens]
 
+    #Apply the sentiment analysis:
+    analyzer = sentiment_analysis.SentimentAnalysisSpanish()
+
+    sentiments = []
+
+    for title in titles:
+        sentiment = analyzer.sentiment(title)
+        sentiments.append(sentiment)
+
     # Train Word2Vec model
     model = Word2Vec(sentences=title_tokens_no_stopwords, vector_size=100, window=5, min_count=1, workers=4)
     
     # Generate dense vectors for each token
     token_vectors = [model.wv[word] for title in title_tokens_no_stopwords for word in title if word in model.wv]
 
-    return token_vectors, titles_length
+    return token_vectors, titles_length, sentiments
 
 
 #Get file and read it with pandas
@@ -39,7 +49,7 @@ df = pd.read_csv(your_file)
 titles = df.iloc[:,0]
 
 #Tokenize every title and return them as dense vector
-tokens, titles_length = tokenize_and_train_word2vec(titles)
+tokens, titles_length, sentiments = tokenize_and_train_word2vec(titles)
 
 # Apply PCA for dimensionality reduction
 pca = PCA(n_components=50)  # Adjust the number of components as needed
@@ -48,6 +58,7 @@ reduced_tokens = pca.fit_transform(tokens)
 print('tokens with no stopwords and vectorized: ', tokens)
 print('reduced tokens shape: ', reduced_tokens)
 print('titles length (each)', titles_length)
+print('Sentiments from each title: ', sentiments)
 
 
 
