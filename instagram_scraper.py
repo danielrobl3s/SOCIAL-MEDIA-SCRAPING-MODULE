@@ -43,19 +43,20 @@ time.sleep(3)
 not_now_button = driver.find_element(By.XPATH, '//div[@role="button"]')
 not_now_button.click()
 
-time.sleep(60)
+time.sleep(10)
 
 links = driver.find_elements(By.XPATH, '//div[@class="_ac7v xzboxd6 xras4av xgc1b0m"]/div/a')
 
+
 for link in links:
     link.click()
-    title = driver.find_element(By.XPATH, '//span[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]//span[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
+    title = driver.find_element(By.XPATH, '//div[@class="_a9zs"]').text
     total_titles.append(title)
-    like = driver.find_element(By.XPATH, '//div[@class="x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz"]//span[@class="html-span xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x1hl2dhg x16tdsg8 x1vvkbs"]').text
+    like = driver.find_element(By.XPATH, '//span[@class="x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs xt0psk2 x1i0vuye xvs91rp x1s688f x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj"]').text
     total_likes.append(like)
-    comment = driver.find_element(By.XPATH, '//div[@class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1xmf6yo x1uhb9sk x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1"]/span[@class="x1lliihq x1plvlek xryxfnj x1n2onr6 x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye x1fhwpqd xo1l8bm x5n08af x1s3etm8 x676frb x10wh9bi x1wdrske x8viiok x18hxmgj"]').text
+    comment = driver.find_element(By.XPATH, '//ul[@class="_a9z6 _a9za"]//div[@class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1uhb9sk x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1"]').text
     comments.append(comment)
-    go_back = driver.find_element(By.XPATH, '//div[@class="x10l6tqk x1nc75zl xi3dyvs x1mywscw"]/div')
+    go_back = driver.find_element(By.XPATH, '//div[@class="x160vmok x10l6tqk x1eu8d0j x1vjfegm"]//div//div')
     go_back.click()
     time.sleep(3)
 
