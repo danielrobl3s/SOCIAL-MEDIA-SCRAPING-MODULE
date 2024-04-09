@@ -13,6 +13,18 @@ total_likes = []
 comments = []
 prefix = 'https://www.instagram.com/'
 
+#function to try and get the comments:
+def get_comments(driver):
+    
+    try:
+        comment = driver.find_elements(By.XPATH, '//ul[@class="_a9ym"]')
+        comments = len(comment)
+    except:
+        comments = '0'
+
+    return comments
+
+
 #Create the web driver to GET request this instagram page https://www.instagram.com/postadurango:
 website = prefix + input('Introduce el nombre de la pagina de instagram: ')
 name = input('nombra tu archivo .csv: ')
@@ -54,8 +66,9 @@ for link in links:
     total_titles.append(title)
     like = driver.find_element(By.XPATH, '//span[@class="x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs xt0psk2 x1i0vuye xvs91rp x1s688f x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj"]').text
     total_likes.append(like)
-    comment = driver.find_element(By.XPATH, '//ul[@class="_a9z6 _a9za"]//div[@class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1uhb9sk x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1"]').text
+    comment = get_comments(driver)
     comments.append(comment)
+
     go_back = driver.find_element(By.XPATH, '//div[@class="x160vmok x10l6tqk x1eu8d0j x1vjfegm"]//div//div')
     go_back.click()
     time.sleep(3)
