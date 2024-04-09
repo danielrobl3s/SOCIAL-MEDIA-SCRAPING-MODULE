@@ -50,6 +50,9 @@ df['Comments'] = pd.to_numeric(df['Comments'], errors='coerce')
 # Sum up likes and comments for each row
 df['Total_Reactions'] = df['Likes'] + df['Comments']
 
+# Extract the 'Total_Reactions' column as a list
+total_interactions = [row['Total_Reactions'] for _, row in df.iterrows()]
+
 
 #Get just the titles to apply nlp
 titles = df.iloc[:,0]
@@ -61,12 +64,11 @@ tokens, titles_length, sentiments = tokenize_and_train_word2vec(titles)
 pca = PCA(n_components=50)  # Adjust the number of components as needed
 reduced_tokens = pca.fit_transform(tokens)
 
-print('tokens with no stopwords and vectorized: ', tokens)
 print('reduced tokens shape: ', reduced_tokens)
 print('titles length (each)', titles_length)
 print('Sentiments from each title: ', sentiments)
-#print total interactions:
-print(df.dtypes)
+print('Total interactions per post: ', total_interactions)
+
 
 
 
