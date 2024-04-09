@@ -34,7 +34,7 @@ def get_likes(driver):
 
     likes_pattern = re.compile(r'^\d+ likes$')
     if likes_pattern.match(like):
-        pass
+        like = like.replace(' likes', '')
     else:
         like = '0'
 
