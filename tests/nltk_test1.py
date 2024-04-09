@@ -44,6 +44,12 @@ def tokenize_and_train_word2vec(titles):
 #Get file and read it with pandas
 your_file = input('Introduce el nombre del archivo: ')
 df = pd.read_csv(your_file)
+df['Likes'] = pd.to_numeric(df['Likes'], errors='coerce')
+df['Comments'] = pd.to_numeric(df['Comments'], errors='coerce')
+
+# Sum up likes and comments for each row
+df['Total_Reactions'] = df['Likes'] + df['Comments']
+
 
 #Get just the titles to apply nlp
 titles = df.iloc[:,0]
@@ -59,6 +65,8 @@ print('tokens with no stopwords and vectorized: ', tokens)
 print('reduced tokens shape: ', reduced_tokens)
 print('titles length (each)', titles_length)
 print('Sentiments from each title: ', sentiments)
+#print total interactions:
+print(df.dtypes)
 
 
 

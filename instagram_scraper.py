@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 import csv
 import time
+import re
 
 username = 'dudedeveloper08@gmail.com'
 password = 'Obaboyamamamama0987654321'
@@ -24,6 +25,20 @@ def get_comments(driver):
 
     return comments
 
+def get_likes(driver):
+    
+    try:
+        like = driver.find_element(By.XPATH, '//span[@class="x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs xt0psk2 x1i0vuye xvs91rp x1s688f x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj"]').text
+    except:
+        like = '0'
+
+    likes_pattern = re.compile(r'^\d+ likes$')
+    if likes_pattern.match(like):
+        pass
+    else:
+        like = '0'
+
+    return like
 
 #Create the web driver to GET request this instagram page https://www.instagram.com/postadurango:
 website = prefix + input('Introduce el nombre de la pagina de instagram: ')
@@ -64,7 +79,7 @@ for link in links:
     link.click()
     title = driver.find_element(By.XPATH, '//div[@class="_a9zs"]').text
     total_titles.append(title)
-    like = driver.find_element(By.XPATH, '//span[@class="x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs xt0psk2 x1i0vuye xvs91rp x1s688f x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj"]').text
+    like = get_likes(driver)
     total_likes.append(like)
     comment = get_comments(driver)
     comments.append(comment)
@@ -72,6 +87,10 @@ for link in links:
     go_back = driver.find_element(By.XPATH, '//div[@class="x160vmok x10l6tqk x1eu8d0j x1vjfegm"]//div//div')
     go_back.click()
     time.sleep(3)
+
+print(total_titles)
+print(total_likes)
+print(comments)
 
 with open(f'{name}.csv', 'w', encoding='utf-8') as file:
     fieldnames = ['Title', 'Likes', 'Comments']
