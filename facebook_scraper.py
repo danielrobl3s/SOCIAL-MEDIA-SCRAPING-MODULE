@@ -86,7 +86,7 @@ for comment in texts:
     index += 1
 
 with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['title', 'reactions', 'comments', 'shares']
+    fieldnames = ['Title', 'Likes', 'Comments', 'Shares']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()    
 
