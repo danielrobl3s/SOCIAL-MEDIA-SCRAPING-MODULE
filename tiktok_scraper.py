@@ -31,7 +31,7 @@ driver.get(website)
 time.sleep(30) #wait 60 seconds or until everything is found
 
 #Get email and password from the facebook login popup to later send them
-login_with_mail_button = driver.find_element(By.XPATH, '(//div[@class="css-7u35li-DivBoxContainer e1cgu1qo0"])[2]')
+login_with_mail_button = driver.find_element(By.XPATH, '(//div[@data-e2e="channel-item"])[2]')
 login_with_mail_button.click()
 
 time.sleep(5)
