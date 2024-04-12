@@ -65,7 +65,7 @@ for parent in parent_div:
     for element in text_span:
        texts.append(element.text)
    except:
-        texts.append('No element')
+        texts.append('0')
 
    try:
     image_tag = parent.find_elements(By.XPATH, './/i')
@@ -91,4 +91,4 @@ with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
     writer.writeheader()    
 
     for data in zip(titles, reactions, comments, shares):
-        writer.writerow({"title": data[0], "reactions": data[1], "comments": data[2], "shares": data[3]})
+        writer.writerow({"Title": data[0], "Likes": data[1], "Comments": data[2], "Shares": data[3]})
