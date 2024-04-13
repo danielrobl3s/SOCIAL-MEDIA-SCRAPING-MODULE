@@ -43,6 +43,7 @@ def tokenize_and_train_word2vec(titles):
 
 #Get file and read it with pandas
 your_file = input('Introduce el nombre del archivo: ')
+name = input('Name your resulting dataset: ')
 df = pd.read_csv(your_file)
 df['Likes'] = pd.to_numeric(df['Likes'], errors='coerce')
 df['Comments'] = pd.to_numeric(df['Comments'], errors='coerce')
@@ -68,6 +69,14 @@ print('reduced tokens shape: ', reduced_tokens)
 print('titles length (each)', titles_length)
 print('Sentiments from each title: ', sentiments)
 print('Total interactions per post: ', total_interactions)
+
+with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    fieldnames = ['Reduced_tokens', 'Titles_length', 'Sentiments', 'Total_interactions']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()    
+
+    for data in zip(reduced_tokens, titles_length, sentiments, total_interactions):
+        writer.writerow({"Reduced_tokens": data[0], "Titles_length": data[1], "Sentiments": data[2], "Total_interactions": data[3]})
 
 
 
