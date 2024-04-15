@@ -1,6 +1,7 @@
 import nltk
 nltk.download('stopwords')
 import pandas as pd
+import numpy as np
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -65,18 +66,20 @@ tokens, titles_length, sentiments = tokenize_and_train_word2vec(titles)
 pca = PCA(n_components=50)  # Adjust the number of components as needed
 reduced_tokens = pca.fit_transform(tokens)
 
-print('reduced tokens shape: ', reduced_tokens)
+summed_tokens = np.sum(reduced_tokens, axis=0)
+
+print('title code: ', summed_tokens)
 print('titles length (each)', titles_length)
 print('Sentiments from each title: ', sentiments)
 print('Total interactions per post: ', total_interactions)
 
 with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['Reduced_tokens', 'Titles_length', 'Sentiments', 'Total_interactions']
+    fieldnames = ['summed_tokens', 'Titles_length', 'Sentiments', 'Total_interactions']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()    
 
-    for data in zip(reduced_tokens, titles_length, sentiments, total_interactions):
-        writer.writerow({"Reduced_tokens": data[0], "Titles_length": data[1], "Sentiments": data[2], "Total_interactions": data[3]})
+    for data in zip(summed_tokens, titles_length, sentiments, total_interactions):
+        writer.writerow({"summed_tokens": data[0], "Titles_length": data[1], "Sentiments": data[2], "Total_interactions": data[3]})
 
 
 
