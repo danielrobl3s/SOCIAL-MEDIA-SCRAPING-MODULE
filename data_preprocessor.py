@@ -68,18 +68,17 @@ reduced_tokens = pca.fit_transform(tokens)
 
 summed_tokens = np.sum(reduced_tokens, axis=0)
 
-print('title code: ', summed_tokens)
 print('titles length (each)', titles_length)
 print('Sentiments from each title: ', sentiments)
 print('Total interactions per post: ', total_interactions)
 
 with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['summed_tokens', 'Titles_length', 'Sentiments', 'Total_interactions']
+    fieldnames = ['Titles_length', 'Sentiments', 'Total_interactions']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()    
 
-    for data in zip(summed_tokens, titles_length, sentiments, total_interactions):
-        writer.writerow({"summed_tokens": data[0], "Titles_length": data[1], "Sentiments": data[2], "Total_interactions": data[3]})
+    for data in zip(titles_length, sentiments, total_interactions):
+        writer.writerow({"Titles_length": data[0], "Sentiments": data[1], "Total_interactions": data[2]})
 
 
 
