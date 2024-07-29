@@ -1,6 +1,5 @@
 appdirs==1.4.4
 attrs==23.2.0
-beautifulsoup4==4.12.3
 bs4==0.0.2
 certifi==2023.11.17
 cffi==1.16.0
@@ -16,7 +15,6 @@ cycler==0.12.1
 dateparser==1.2.0
 decorator==5.1.1
 demjson3==3.0.6
-facebook_page_info_scraper==1.1.2
 fake-useragent==1.4.0
 fonttools==4.49.0
 gensim==4.3.2
