@@ -39,16 +39,17 @@ driver.implicitly_wait(60) #wait 60 seconds or until everything is found
 
 
 #Get email and password from the facebook login popup to later send them
-email = driver.find_element(By.XPATH, '//input[(@class="x1i10hfl xggy1nq x1s07b3s x1kdt53j x1a2a7pz xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 xzsf02u x1uxerd5 x1fcty0u x132q4wb x1a8lsjc x1pi30zi x1swvt13 x9desvi xh8yej3 x15h3p50 x10emqs4") and (@type="text")]').send_keys(username)
-pw = driver.find_element(By.XPATH, '//input[(@class="x1i10hfl xggy1nq x1s07b3s x1kdt53j x1a2a7pz xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 xzsf02u x1uxerd5 x1fcty0u x132q4wb x1a8lsjc x1pi30zi x1swvt13 x9desvi xh8yej3 x15h3p50 x10emqs4") and (@type="password")]').send_keys(password)
-login = driver.find_element(By.XPATH, '//div[@class="x1c436fg"]/div[(@aria-label="Accessible login button") and (@role="button")]')
+email = driver.find_element(By.XPATH, '//input[@type="text"]').send_keys(username)
+pw = driver.find_element(By.XPATH, '//label[@aria-label="Contraseña"]/input').send_keys(password)
+time.sleep(5)
+login = driver.find_element(By.XPATH, '//div[@class="x1n2onr6 x1ja2u2z x78zum5 x2lah0s xl56j7k x6s0dn4 xozqiw3 x1q0g3np xi112ho x17zwfj4 x585lrc x1403ito x972fbf xcfux6l x1qhh985 xm0m39n x9f619 xn6708d x1ye3gou xtvsq51 x1fq8qgq"]')
 login.click()
 
-time.sleep(60)
+time.sleep(500)
 
-#scroll()
+scroll()
 
-soup = BeautifulSoup(driver.page_source, 'html.parser')
+""" soup = BeautifulSoup(driver.page_source, 'html.parser')
 
 posts = driver.find_elements(By.XPATH, '//div[@class="xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs x126k92a"]')
 titles = [element.text for element in posts]
@@ -92,3 +93,4 @@ with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
 
     for data in zip(titles, reactions, comments, shares):
         writer.writerow({"Title": data[0], "Likes": data[1], "Comments": data[2], "Shares": data[3]})
+ """
