@@ -11,7 +11,7 @@ import time
 
 username = "dudedeveloper08@gmail.com"
 password = "Obaboyamama@12"
-prefix = "https://www.tiktok.com/"
+prefix = "https://www.tiktok.com/@"
 titles = []
 likes = []
 comments = []
