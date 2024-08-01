@@ -2,13 +2,13 @@
 Machine learning project that identifies tendencies for a Durango (Mexico) local news company
 
 # Read first before anything else
-######In order to get the whole code to work, you need to install 'requirements.txt' file, these are the dependencies needed for your python environment.
+###### In order to get the whole code to work, you need to install 'requirements.txt' file, these are the dependencies needed for your python environment.
 
 `python3 -m venv env` ---> Creates a new python virtual environment
 `source env/scripts/activate` ---> Activates the recently created virtual environment (command may vary from windows, mac and linux or your specific file system)
 `pip install -r requirements.txt` ---> Gets all the dependencies needed for this project
 
-###Chrome driver installation:
+### Chrome driver installation:
 This project uses selenium to work, which is a automated testing tool for chrome, chromedriver updates relatively often, you need to update it and add it to your path environment variable:
 
 Download chromedriver at: https://googlechromelabs.github.io/chrome-for-testing/#stable
@@ -29,7 +29,7 @@ if you're currently having troubles with chromedrive related issues, please refe
 
 
 
-###Data collecting module:
+### Data collecting module:
 
 This module consists of 3 specific files: facebook_scraper.py, instagram_scraper.py and tiktok_scraper.py
 
