@@ -28,15 +28,22 @@ driver.get(website)
 
 #We make driver wait until all elements are on screen
 
-time.sleep(30) #wait 60 seconds or until everything is found
+time.sleep(30) #wait until everything is found
+
+login_b = driver.find_element(By.XPATH, '//button[@data-e2e="top-login-button"]')
+login_b.click()
+
+time.sleep(5)
+
+
 
 #Get email and password from the facebook login popup to later send them
-login_with_mail_button = driver.find_element(By.XPATH, '(//div[@data-e2e="channel-item"])[2]')
+login_with_mail_button = driver.find_element(By.XPATH, '//div[@class="css-102dq55-DivLoginOptionContainer exd0a434"]/div[2]')
 login_with_mail_button.click()
 
 time.sleep(5)
 
-get_email_link = driver.find_element(By.XPATH, '//a[@class="ep888o80 css-1mgli76-ALink-StyledLink epl6mg0"]')
+get_email_link = driver.find_element(By.XPATH, '//a[@href="/login/phone-or-email/email"]')
 get_email_link.click()
 
 time.sleep(10)
@@ -46,7 +53,7 @@ password = driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(
 submit = driver.find_element(By.XPATH, '//button[@data-e2e="login-button"]')
 submit.click()
 
-time.sleep(30)
+time.sleep(300)
 
 posts = driver.find_elements(By.XPATH, '//div[@class="css-x6y88p-DivItemContainerV2 e19c29qe8"]')
 
