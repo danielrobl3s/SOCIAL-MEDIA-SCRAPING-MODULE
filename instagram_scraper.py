@@ -54,7 +54,7 @@ driver.get(website)
 #We make driver wait until all elements are on screen
 time.sleep(10)
 
-login_button = driver.find_element(By.XPATH, '//a[@href="/accounts/login/?next=%2FPOSTADurango%2F&source=desktop_nav"]')
+login_button = driver.find_element(By.XPATH, '//div[@class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1d52u69 x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1"][1]/a')
 login_button.click()
 
 time.sleep(5)
@@ -65,14 +65,14 @@ password = driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(
 submit_button = driver.find_element(By.XPATH, '//button[@class=" _acan _acap _acas _aj1- _ap30"]')
 submit_button.click()
 
-time.sleep(3)
+time.sleep(10)
 
 not_now_button = driver.find_element(By.XPATH, '//div[@role="button"]')
 not_now_button.click()
 
 time.sleep(10)
 
-links = driver.find_elements(By.XPATH, '//div[@class="_ac7v xzboxd6 xras4av xgc1b0m"]/div/a')
+links = driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]//div/a')
 
 
 for link in links:
