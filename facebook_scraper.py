@@ -45,9 +45,14 @@ time.sleep(5)
 login = driver.find_element(By.XPATH, '//div[@class="x1n2onr6 x1ja2u2z x78zum5 x2lah0s xl56j7k x6s0dn4 xozqiw3 x1q0g3np xi112ho x17zwfj4 x585lrc x1403ito x972fbf xcfux6l x1qhh985 xm0m39n x9f619 xn6708d x1ye3gou xtvsq51 x1fq8qgq"]')
 login.click()
 
-time.sleep(500)
+timeline = driver.find_elements(By.XPATH, '//div[@data-pagelet="ProfileTimeline"]')
+time.sleep(10)
 
-scroll()
+for element in timeline:
+    print(element.text)
+
+
+
 
 """ soup = BeautifulSoup(driver.page_source, 'html.parser')
 
