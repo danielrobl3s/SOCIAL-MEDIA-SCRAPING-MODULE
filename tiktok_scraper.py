@@ -17,6 +17,20 @@ likes = []
 comments = []
 saved = []
 
+def login_with_email():
+
+    login_with_mail_button = driver.find_element(By.XPATH, '//div[@class="css-102dq55-DivLoginOptionContainer exd0a434"]/div[2]')
+    login_with_mail_button.click()
+
+
+def login_with_google():
+    
+    login_with_gmail = driver.find_element(By.XPATH, '//div[@class="css-102dq55-DivLoginOptionContainer exd0a434"]/div[4]')
+    login_with_gmail.click()
+
+
+
+
 website = prefix + input('Introduce la cuenta de tiktok a la que quieres acceder: ')
 name = input('Nombra tu archivo .csv: ')
 
@@ -28,27 +42,14 @@ driver.get(website)
 
 #We make driver wait until all elements are on screen
 
-<<<<<<< HEAD
 time.sleep(20) #wait 60 seconds or until everything is found
 
 login_button = driver.find_element(By.XPATH, '//button[@id="header-login-button"]')
 login_button.click()
 
 time.sleep(20)
-=======
-time.sleep(30) #wait until everything is found
 
-login_b = driver.find_element(By.XPATH, '//button[@data-e2e="top-login-button"]')
-login_b.click()
-
-time.sleep(5)
-
-
->>>>>>> cacd5e28715cb17b58a107d22ab4a7fc6bf1e3d9
-
-#Get email and password from the facebook login popup to later send them
-login_with_mail_button = driver.find_element(By.XPATH, '//div[@class="css-102dq55-DivLoginOptionContainer exd0a434"]/div[2]')
-login_with_mail_button.click()
+login_with_email()
 
 time.sleep(600)
 
@@ -92,3 +93,4 @@ with open(f'{name}.csv', 'w', encoding='utf-8') as file:
 
     for data in zip(titles, likes, comments, saved):
         writer.writerow({"Title": data[0], "Likes": data[1], "Comments": data[2], "Saved": data[3]})
+
