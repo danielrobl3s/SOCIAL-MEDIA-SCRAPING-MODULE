@@ -64,6 +64,7 @@ time.sleep(30)
 posts = driver.find_elements(By.XPATH, '//div[@data-e2e="user-post-item-list"]/div')
 
 for post in posts:
+    
     post.click()
 
     title = driver.find_element(By.XPATH, '//div[@class="css-1nst91u-DivMainContent e1mecfx01"]').text
@@ -80,6 +81,8 @@ for post in posts:
 
     close = driver.find_element(By.XPATH, '//button[@aria-label="Close"]')
     close.click()
+
+    time.sleep(2)
 
 
 with open(f'{name}.csv', 'w', encoding='utf-8') as file:
