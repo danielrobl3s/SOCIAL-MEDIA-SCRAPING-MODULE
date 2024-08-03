@@ -1,13 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import undetected_chromedriver as uc
-from selenium_stealth import stealth
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
+from bs4 import BeautifulSoup
+import urllib3
 import csv
+import re
 import time
-
-options = webdriver.ChromeOptions()
-driver = webdriver.Chrome(options=options)
 
 username = "dudedeveloper08@gmail.com"
 password = "Obaboyamama@12"
@@ -19,52 +19,55 @@ saved = []
 
 def login_with_email():
 
-    time.sleep(10)
-
-    login_with_mail = driver.find_element(By.XPATH, '//div[@class="css-102dq55-DivLoginOptionContainer exd0a434"]/div[2]')
-    login_with_mail.click()
-
-    time.sleep(10)
+    login_with_mail_button = driver.find_element(By.XPATH, '//div[@class="css-102dq55-DivLoginOptionContainer exd0a434"]/div[2]')
+    login_with_mail_button.click()
 
 
-stealth(driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True,
-       )
+def login_with_google():
+    
+    login_with_gmail = driver.find_element(By.XPATH, '//div[@class="css-102dq55-DivLoginOptionContainer exd0a434"]/div[4]')
+    login_with_gmail.click()
+
+
 
 
 website = prefix + input('Introduce la cuenta de tiktok a la que quieres acceder: ')
 name = input('Nombra tu archivo .csv: ')
+
+chrome_options = webdriver.ChromeOptions()
+prefs = {"profile.default_content_setting_values.notifications" : 2}
+chrome_options.add_experimental_option("prefs",prefs)
+driver = webdriver.Chrome(options=chrome_options)
 driver.get(website)
 
-time.sleep(20)
+#We make driver wait until all elements are on screen
+
+time.sleep(20) #wait 60 seconds or until everything is found
 
 login_button = driver.find_element(By.XPATH, '//button[@id="header-login-button"]')
 login_button.click()
 
-time.sleep(30)
+time.sleep(20)
 
 login_with_email()
+
+time.sleep(600)
 
 get_email_link = driver.find_element(By.XPATH, '//a[@href="/login/phone-or-email/email"]')
 get_email_link.click()
 
-""" email = driver.find_element(By.XPATH, '//input[@name="username"]').send_keys(username)
+time.sleep(10)
+
+email = driver.find_element(By.XPATH, '//input[@name="username"]').send_keys(username)
 password = driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(password)
-
 submit = driver.find_element(By.XPATH, '//button[@data-e2e="login-button"]')
-submit.click() """
+submit.click()
 
-time.sleep(30)
+time.sleep(300)
 
-posts = driver.find_elements(By.XPATH, '//div[@data-e2e="user-post-item-list"]/div')
+posts = driver.find_elements(By.XPATH, '//div[@class="css-x6y88p-DivItemContainerV2 e19c29qe8"]')
 
 for post in posts:
-    
     post.click()
 
     title = driver.find_element(By.XPATH, '//div[@class="css-1nst91u-DivMainContent e1mecfx01"]').text
@@ -82,8 +85,6 @@ for post in posts:
     close = driver.find_element(By.XPATH, '//button[@aria-label="Close"]')
     close.click()
 
-    time.sleep(2)
-
 
 with open(f'{name}.csv', 'w', encoding='utf-8') as file:
     fieldnames = ['Title', 'Likes', 'Comments', 'Saved']
@@ -92,5 +93,4 @@ with open(f'{name}.csv', 'w', encoding='utf-8') as file:
 
     for data in zip(titles, likes, comments, saved):
         writer.writerow({"Title": data[0], "Likes": data[1], "Comments": data[2], "Saved": data[3]})
-
 
