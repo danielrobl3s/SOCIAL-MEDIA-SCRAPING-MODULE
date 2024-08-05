@@ -23,17 +23,16 @@ stealth(driver,
         vendor="Google Inc.",
         platform="Win32",
         webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
+        renderer="Intel Iris OpenGL Engine", 
         fix_hairline=True,
        )
-
 
 
 #function to try and get the comments:
 def get_comments(driver):
     
     try:
-        comment = driver.find_elements(By.XPATH, '//ul[@class="_a9ym"]')
+        comment = driver.find_elements(By.XPATH, '//ul[@class="_a9z6 _a9za"]/div[3]/div/div/div')
         comments = len(comment)
     except:
         comments = '0'
