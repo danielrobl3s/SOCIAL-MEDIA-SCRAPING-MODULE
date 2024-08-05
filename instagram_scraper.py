@@ -1,19 +1,33 @@
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
+import undetected_chromedriver as uc
+from selenium_stealth import stealth
 import csv
 import time
 import re
 
-username = 'dudedeveloper08@gmail.com'
-password = 'Obaboyamamamama0987654321'
+username = "danielrobl3s"
+password = "Don't fucking scam me 89"
 
 total_titles = []
 total_likes = []
 comments = []
 prefix = 'https://www.instagram.com/'
+
+options = webdriver.ChromeOptions()
+driver = webdriver.Chrome(options=options)
+
+stealth(driver,
+        languages=["en-US", "en"],
+        vendor="Google Inc.",
+        platform="Win32",
+        webgl_vendor="Intel Inc.",
+        renderer="Intel Iris OpenGL Engine",
+        fix_hairline=True,
+       )
+
+
 
 #function to try and get the comments:
 def get_comments(driver):
@@ -40,13 +54,8 @@ def get_likes(driver):
     return like
 
 #Create the web driver to GET request this instagram page https://www.instagram.com/postadurango:
-website = prefix + input('Introduce el nombre de la pagina de instagram: ')
-name = input('nombra tu archivo .csv: ')
-
-chrome_options = webdriver.ChromeOptions()
-prefs = {"profile.default_content_setting_values.notifications" : 2}
-chrome_options.add_experimental_option("prefs",prefs)
-driver = webdriver.Chrome(options=chrome_options)
+website = prefix + input('Introduce la cuenta de tiktok a la que quieres acceder: ')
+name = input('Nombra tu archivo .csv: ')
 driver.get(website)
 
 #We make driver wait until all elements are on screen
