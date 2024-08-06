@@ -15,18 +15,6 @@ total_likes = []
 comments = []
 prefix = 'https://www.instagram.com/'
 
-options = webdriver.ChromeOptions()
-driver = webdriver.Chrome(options=options)
-
-stealth(driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine", 
-        fix_hairline=True,
-       )
-
 
 #function to try and get the comments:
 def get_comments(driver):
@@ -55,6 +43,11 @@ def get_likes(driver):
 #Create the web driver to GET request this instagram page https://www.instagram.com/postadurango:
 website = prefix + input('Introduce la cuenta de tiktok a la que quieres acceder: ')
 name = input('Nombra tu archivo .csv: ')
+
+chrome_options = webdriver.ChromeOptions()
+prefs = {"profile.default_content_setting_values.notifications" : 2}
+chrome_options.add_experimental_option("prefs",prefs)
+driver = webdriver.Chrome(options=chrome_options)
 driver.get(website)
 
 #We make driver wait until all elements are on screen
@@ -76,14 +69,14 @@ time.sleep(10)
 not_now_button = driver.find_element(By.XPATH, '//div[@role="button"]')
 not_now_button.click()
 
-time.sleep(10)
+time.sleep(600)
 
 links = driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]//div/a')
 
 
 for link in links:
     link.click()
-    title = driver.find_element(By.XPATH, '//div[@class="_a9zs"]').text
+    title = driver.find_element(By.XPATH, '//h1').text
     total_titles.append(title)
     like = get_likes(driver)
     total_likes.append(like)
