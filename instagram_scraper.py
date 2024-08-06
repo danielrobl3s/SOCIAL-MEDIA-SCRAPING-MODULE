@@ -7,16 +7,8 @@ import csv
 import time
 import re
 
-username = "danielrobl3s"
-password = "Don't fucking scam me 89"
 
-total_titles = []
-total_likes = []
-comments = []
-prefix = 'https://www.instagram.com/'
-
-
-#function to try and get the comments:
+#function to try and retrieve comments:
 def get_comments(driver):
     
     try:
@@ -27,6 +19,7 @@ def get_comments(driver):
 
     return comments
 
+#Function that retrieves likes:
 def get_likes(driver):
     
     try:
@@ -40,26 +33,37 @@ def get_likes(driver):
 
     return like
 
-#Create the web driver to GET request this instagram page https://www.instagram.com/postadurango:
-website = prefix + input('Introduce la cuenta de tiktok a la que quieres acceder: ')
-name = input('Nombra tu archivo .csv: ')
 
-chrome_options = webdriver.ChromeOptions()
-prefs = {"profile.default_content_setting_values.notifications" : 2}
-chrome_options.add_experimental_option("prefs",prefs)
-driver = webdriver.Chrome(options=chrome_options)
-driver.get(website)
+username = "danielrobl3s"
+password = "Don't fucking scam me 89"
 
-#We make driver wait until all elements are on screen
+total_titles = []
+total_likes = []
+comments = []
+prefix = 'https://www.instagram.com/'
+site = input('Type the instagram profile you want to scrape: ')
+name = input('Name your csv file: ')
+
+options = webdriver.ChromeOptions()
+driver = webdriver.Chrome(options=options)
+
+stealth(driver,
+        languages=["en-US", "en"],
+        vendor="Google Inc.",
+        platform="Win32",
+        webgl_vendor="Intel Inc.",
+        renderer="Intel Iris OpenGL Engine",
+        fix_hairline=True,
+       )
+
+driver.get(prefix)
+
 time.sleep(10)
-
-login_button = driver.find_element(By.XPATH, '//div[@class="x9f619 xjbqb8w x78zum5 x168nmei x13lgxp2 x5pf9jr xo71vjh x1d52u69 x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1"][1]/a')
-login_button.click()
-
-time.sleep(5)
 
 username = driver.find_element(By.XPATH, '//input[@type="text"]').send_keys(username)
 password = driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(password)
+
+time.sleep(5)
 
 submit_button = driver.find_element(By.XPATH, '//button[@class=" _acan _acap _acas _aj1- _ap30"]')
 submit_button.click()
@@ -69,13 +73,30 @@ time.sleep(10)
 not_now_button = driver.find_element(By.XPATH, '//div[@role="button"]')
 not_now_button.click()
 
-time.sleep(600)
+time.sleep(10)
+
+not_now_again = driver.find_element(By.XPATH, '//button[@class="_a9-- _ap36 _a9_1"]')
+not_now_again.click()
+
+time.sleep(5)
+
+search = driver.find_element(By.XPATH, '//div[@class="x1iyjqo2 xh8yej3"]/div[2]/span')
+search.click()
+
+time.sleep(5)
+
+input_search = driver.find_element(By.XPATH, '//input[@aria-label="Search input"]').send_keys(site)
+input_search2 = driver.find_element(By.XPATH, '//input[@aria-label="Search input"]').send_keys(Keys.ENTER)
+
+time.sleep(5)
 
 links = driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]//div/a')
 
-
 for link in links:
     link.click()
+
+    time.sleep(600)
+
     title = driver.find_element(By.XPATH, '//h1').text
     total_titles.append(title)
     like = get_likes(driver)
