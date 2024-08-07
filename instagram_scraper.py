@@ -7,6 +7,15 @@ import csv
 import time
 import re
 
+#Function to get the title and return it, otherwise returns no title
+def get_title():
+    try:
+        title = driver.find_element(By.XPATH, '//h1[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
+    except:
+        title = 'No title found'
+    
+    return title
+
 
 #function to try and retrieve comments:
 def get_comments(driver):
@@ -100,7 +109,7 @@ for link in links:
 
     time.sleep(10)
 
-    title = driver.find_element(By.XPATH, '//h1[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
+    title = get_title()
     total_titles.append(title)
     like = get_likes(driver)
     total_likes.append(like)
