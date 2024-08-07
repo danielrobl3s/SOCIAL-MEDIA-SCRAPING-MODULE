@@ -86,18 +86,21 @@ search.click()
 time.sleep(5)
 
 input_search = driver.find_element(By.XPATH, '//input[@aria-label="Search input"]').send_keys(site)
-input_search2 = driver.find_element(By.XPATH, '//input[@aria-label="Search input"]').send_keys(Keys.ENTER)
+time.sleep(4)
 
-time.sleep(5)
+profile = driver.find_element(By.XPATH, '//a[@class="x1i10hfl x1qjc9v5 xjbqb8w xjqpnuy xa49m3k xqeqjp1 x2hbi6w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x87ps6o x1lku1pv x1a2a7pz x1dm5mii x16mil14 xiojian x1yutycm x1lliihq x193iq5w xh8yej3"][1]')
+profile.click()
+
+time.sleep(10)
 
 links = driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]//div/a')
 
 for link in links:
     link.click()
 
-    time.sleep(600)
+    time.sleep(10)
 
-    title = driver.find_element(By.XPATH, '//h1').text
+    title = driver.find_element(By.XPATH, '//h1[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
     total_titles.append(title)
     like = get_likes(driver)
     total_likes.append(like)
