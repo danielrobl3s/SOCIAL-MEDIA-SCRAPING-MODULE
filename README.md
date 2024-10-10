@@ -1,5 +1,5 @@
 # SOCIAL MEDIA SCRAPING MODULE
-Machine learning project that identifies tendencies for a Durango (Mexico) local news company
+Web scrapers to social media (Facebook, Instagram and Tiktok)
 
 # Read first before anything else
 ###### In order to get the whole code to work, you need to install 'requirements.txt' file, these are the dependencies needed for your python environment.
