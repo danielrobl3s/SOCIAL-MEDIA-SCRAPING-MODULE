@@ -2,15 +2,6 @@ import requests
 
 def get_user_posts(username):
 
-  codes = []
-  media_ids = []
-  titles = []
-  likes_count = []
-  comment_counts = []
-  comments = []
-  videos = []
-  dates = []
-
   url = "https://www.instagram.com/graphql/query"
 
   payload = f'av=17841465245145777&hl=es&__d=www&__user=0&__a=1&__req=6&__hs=20006.HYP%3Ainstagram_web_pkg.2.1..0.1&dpr=2&__ccg=UNKNOWN&__rev=1017226246&__s=qj0nq9%3A24xszg%3A0acc7x&__hsi=7424179546107152794&__dyn=7xe5WwlEnwn8K2Wmm1twpUnwgU7S6EdF8aUco38w5ux60p-0LVE4W0om782Cw8G11w6zx61vwoEcE2ygao1aU2swc20EUjwGzEaE2iwNwmE2ewnE3fw5rwSyES1Twoob82ZwrUdUbGw4mwr86C1mwrd6goK10xKi2K7E5yqcxK2K0PUy&__csr=&__comet_req=7&fb_dtsg=NAcP6H2QkkOxEhrlBsRWSdzd4VpTHE_6gobXFTI4JOO_l4kKle2eQyg%3A17843676607167008%3A1728527552&jazoest=26312&lsd=T_FkSMEN_zVrruSDga-ofO&__spin_r=1017226246&__spin_b=trunk&__spin_t=1728576502&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=PolarisProfilePostsQuery&variables=%7B%22data%22%3A%7B%22count%22%3A12%2C%22include_relationship_info%22%3Atrue%2C%22latest_besties_reel_media%22%3Atrue%2C%22latest_reel_media%22%3Atrue%7D%2C%22username%22%3A%22{username}%22%2C%22__relay_internal__pv__PolarisIsLoggedInrelayprovider%22%3Atrue%2C%22__relay_internal__pv__PolarisFeedShareMenurelayprovider%22%3Atrue%7D&server_timestamps=true&doc_id=8343115342433006'
@@ -50,34 +41,26 @@ def get_user_posts(username):
   for post in posts:
     
     code = post['node']['code']
-    codes.append(code)
 
     media_id = post['node']['pk']
-    media_ids.append(media_id
-                     )
+
     title = post['node']['caption']['text']
-    titles.append(title)
 
     like_count = post['node']['like_count']
-    likes_count.append(like_count)
 
     comment_count = post['node']['comment_count']
-    comment_counts.append(comment_count)
 
     comment = get_post_comments(code, media_id)
-    comments.append(comment)
 
     if post['node']['video_versions'] == None:
       is_video = "False"
-      videos.append(is_video)
+
     else:
       is_video = "True"
-      videos.append(is_video)
 
     taken_at = post['node']['taken_at']
-    dates.append(taken_at)
 
-    data.append({"code": code, "media_id": media_id, "title": title, "likes_count": like_count, "comment_count": comment_count, "comments": comments, "is_video?": is_video, "taken_at": taken_at})
+    data.append({"code": code, "media_id": media_id, "title": title, "likes_count": like_count, "comment_count": comment_count, "comments": comment, "is_video?": is_video, "taken_at": taken_at})
 
   return data
 
