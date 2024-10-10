@@ -1,101 +1,35 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
-from bs4 import BeautifulSoup
-import urllib3
-import csv
-import re
-import time
+import requests
 
-username = 'dudedeveloper08@gmail.com'
-password = 'Este es el correo del dude developer 89'
-prefix = 'https://www.facebook.com/'
-texts = []
-images = []
+url = "https://www.instagram.com/graphql/query"
 
-#Scroll function
-def scroll():
-    scroll_origin = ScrollOrigin.from_viewport(10, 10)
+payload = 'av=17841449375330360&__d=www&__user=0&__a=1&__req=6&__hs=20005.HYP%3Ainstagram_web_pkg.2.1..0.1&dpr=2&__ccg=GOOD&__rev=1017196109&__s=k616pf%3Acsuhmx%3A4pljhb&__hsi=7423904862231244833&__dyn=7xe5WwlEnwn8K2Wmm1twpUnwgU7S6EdF8aUco38w5ux60p-0LVE4W0om782Cw8G11w6zx61vwoEcE2ygao1aU2swc20EUjwGzEaE2iwNwmE2ewnE3fw5rwSyES1Twoob82ZwrUdUbGw4mwr86C1mwrd6goK10xKi2K7E5yqcxK2K0PUy&__csr=&__comet_req=7&fb_dtsg=NAcPLETcAakF7Ac8IRHWPw9rNoyAKj3t9SnHaiZNiyHgcjUdAW3zfSw%3A17843729647189359%3A1728506540&jazoest=26326&lsd=3DlQbzuDt6hcu6VZC4OXAy&__spin_r=1017196109&__spin_b=trunk&__spin_t=1728512547&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=PolarisProfilePostsQuery&variables=%7B%22data%22%3A%7B%22count%22%3A12%2C%22include_relationship_info%22%3Atrue%2C%22latest_besties_reel_media%22%3Atrue%2C%22latest_reel_media%22%3Atrue%7D%2C%22username%22%3A%22nodal%22%2C%22__relay_internal__pv__PolarisIsLoggedInrelayprovider%22%3Atrue%2C%22__relay_internal__pv__PolarisFeedShareMenurelayprovider%22%3Atrue%7D&server_timestamps=true&doc_id=8343115342433006'
+headers = {
+  'accept': '*/*',
+  'accept-language': 'es-419,es;q=0.9',
+  'content-type': 'application/x-www-form-urlencoded',
+  'cookie': 'mid=ZwRUWQAEAAEkOkvuteNAO2TdW--K; datr=WVQEZ9otxSdrW3lboj2lt3LI; ig_did=B52CEFC3-E13F-469D-AAAD-5C5C929934B3; ps_l=1; ps_n=1; fbm_124024574287414=base_domain=.instagram.com; ig_nrcb=1; ig_direct_region_hint="VLL\05449282885844\0541760048280:01f7399b20e704d7f6a48609d1a2bc4e1e11f0fc10052998f01ec225c4d823c141fb4d30"; csrftoken=UP5Srl1PbIGo2LlwHCRVBIsDYvxD2rSQ; ds_user_id=65086222838; sessionid=65086222838%3AnnvTf7pX8fywZD%3A25%3AAYevzOvpApPVcciUH5FeI0OimQs4ncAuzYKXoXgJBA; wd=663x812; rur="RVA\05465086222838\0541760063670:01f7245ede3164691e90aef6ca55c804772d791ef0dd5636e35b7737b8a47928c04c8d85"',
+  'origin': 'https://www.instagram.com',
+  'priority': 'u=1, i',
+  'referer': 'https://www.instagram.com/nodal/',
+  'sec-ch-prefers-color-scheme': 'dark',
+  'sec-ch-ua': '"Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+  'sec-ch-ua-full-version-list': '"Google Chrome";v="129.0.6668.100", "Not=A?Brand";v="8.0.0.0", "Chromium";v="129.0.6668.100"',
+  'sec-ch-ua-mobile': '?0',
+  'sec-ch-ua-model': '""',
+  'sec-ch-ua-platform': '"macOS"',
+  'sec-ch-ua-platform-version': '"14.6.1"',
+  'sec-fetch-dest': 'empty',
+  'sec-fetch-mode': 'cors',
+  'sec-fetch-site': 'same-origin',
+  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+  'x-asbd-id': '129477',
+  'x-bloks-version-id': '8bb50762167c4432c174a01a25b916bfc9b78985507f03558e2f04754cf7cb10',
+  'x-csrftoken': 'S1PkLaB9tIrf9ck70K6ICl8UiMx29HRx',
+  'x-fb-friendly-name': 'PolarisProfilePostsQuery',
+  'x-fb-lsd': '3DlQbzuDt6hcu6VZC4OXAy',
+  'x-ig-app-id': '936619743392459'
+}
 
-    ActionChains(driver)\
-        .scroll_from_origin(scroll_origin, 0, 10000)\
-        .perform()
+response = requests.request("POST", url, headers=headers, data=payload)
 
-#Create the web driver to GET request this facebook page:
-website = prefix + input('Introduce the website to be scraped: ')
-name = input('Name your csv file: ')
-
-chrome_options = webdriver.ChromeOptions()
-prefs = {"profile.default_content_setting_values.notifications" : 2}
-chrome_options.add_experimental_option("prefs",prefs)
-driver = webdriver.Chrome(options=chrome_options)
-driver.get(website)
-
-#We make driver wait until all elements are on screen
-
-driver.implicitly_wait(60) #wait 60 seconds or until everything is found
-
-
-#Get email and password from the facebook login popup to later send them
-email = driver.find_element(By.XPATH, '//input[@type="text"]').send_keys(username)
-pw = driver.find_element(By.XPATH, '//label[@aria-label="Contraseña"]/input').send_keys(password)
-time.sleep(5)
-login = driver.find_element(By.XPATH, '//div[@class="x1n2onr6 x1ja2u2z x78zum5 x2lah0s xl56j7k x6s0dn4 xozqiw3 x1q0g3np xi112ho x17zwfj4 x585lrc x1403ito x972fbf xcfux6l x1qhh985 xm0m39n x9f619 xn6708d x1ye3gou xtvsq51 x1fq8qgq"]')
-login.click()
-
-timeline = driver.find_elements(By.XPATH, '//div[@data-pagelet="ProfileTimeline"]')
-time.sleep(10)
-
-for element in timeline:
-    print(element.text)
-
-
-
-
-""" soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-posts = driver.find_elements(By.XPATH, '//div[@class="xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs x126k92a"]')
-titles = [element.text for element in posts]
-
-reacts = driver.find_elements(By.XPATH, '//span[(@aria-hidden) and (@class="xrbpyxo x6ikm8r x10wlt62 xlyipyv x1exxlbk")]')
-reactions = [element.text for element in reacts]
-
-parent_div = driver.find_elements(By.XPATH, '//div[@class="x9f619 x1n2onr6 x1ja2u2z x78zum5 x2lah0s x1qughib x1qjc9v5 xozqiw3 x1q0g3np xykv574 xbmpl8g x4cne27 xifccgj"]')
-
-for parent in parent_div:
-   
-   try:
-    text_span = parent.find_elements(By.XPATH, './/span[@class="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa"]')
-    for element in text_span:
-       texts.append(element.text)
-   except:
-        texts.append('0')
-
-   try:
-    image_tag = parent.find_elements(By.XPATH, './/i')
-    for element in image_tag:
-         images.append(element.get_attribute("style"))
-   except:
-      images.append("No element")
-
-print(titles, reactions, texts, images, len(titles), len(reactions), len(texts), len(images))
-
-shares = []
-comments = texts[::2]
-
-index = 0
-for comment in texts:    
-    if index%2 != 0:
-        shares.append(comment)
-    index += 1
-
-with open(f'{name}.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['Title', 'Likes', 'Comments', 'Shares']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()    
-
-    for data in zip(titles, reactions, comments, shares):
-        writer.writerow({"Title": data[0], "Likes": data[1], "Comments": data[2], "Shares": data[3]})
- """
+print(response.json())

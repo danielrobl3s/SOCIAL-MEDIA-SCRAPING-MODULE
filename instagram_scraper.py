@@ -1,133 +1,135 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-import undetected_chromedriver as uc
-from selenium_stealth import stealth
-import csv
-import time
-import re
+import requests
 
-#Function to get the title and return it, otherwise returns no title
-def get_title():
-    try:
-        title = driver.find_element(By.XPATH, '//h1[@class="_ap3a _aaco _aacu _aacx _aad7 _aade"]').text
-    except:
-        title = 'No title found'
+def get_user_posts(username):
+
+  codes = []
+  media_ids = []
+  titles = []
+  likes_count = []
+  comment_counts = []
+  comments = []
+  videos = []
+  dates = []
+
+  url = "https://www.instagram.com/graphql/query"
+
+  payload = f'av=17841465245145777&hl=es&__d=www&__user=0&__a=1&__req=6&__hs=20006.HYP%3Ainstagram_web_pkg.2.1..0.1&dpr=2&__ccg=UNKNOWN&__rev=1017226246&__s=qj0nq9%3A24xszg%3A0acc7x&__hsi=7424179546107152794&__dyn=7xe5WwlEnwn8K2Wmm1twpUnwgU7S6EdF8aUco38w5ux60p-0LVE4W0om782Cw8G11w6zx61vwoEcE2ygao1aU2swc20EUjwGzEaE2iwNwmE2ewnE3fw5rwSyES1Twoob82ZwrUdUbGw4mwr86C1mwrd6goK10xKi2K7E5yqcxK2K0PUy&__csr=&__comet_req=7&fb_dtsg=NAcP6H2QkkOxEhrlBsRWSdzd4VpTHE_6gobXFTI4JOO_l4kKle2eQyg%3A17843676607167008%3A1728527552&jazoest=26312&lsd=T_FkSMEN_zVrruSDga-ofO&__spin_r=1017226246&__spin_b=trunk&__spin_t=1728576502&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=PolarisProfilePostsQuery&variables=%7B%22data%22%3A%7B%22count%22%3A12%2C%22include_relationship_info%22%3Atrue%2C%22latest_besties_reel_media%22%3Atrue%2C%22latest_reel_media%22%3Atrue%7D%2C%22username%22%3A%22{username}%22%2C%22__relay_internal__pv__PolarisIsLoggedInrelayprovider%22%3Atrue%2C%22__relay_internal__pv__PolarisFeedShareMenurelayprovider%22%3Atrue%7D&server_timestamps=true&doc_id=8343115342433006'
+  headers = {
+    'accept': '*/*',
+    'accept-language': 'es-419,es;q=0.9',
+    'content-type': 'application/x-www-form-urlencoded',
+    'cookie': 'mid=ZwRUWQAEAAEkOkvuteNAO2TdW--K; datr=WVQEZ9otxSdrW3lboj2lt3LI; ig_did=B52CEFC3-E13F-469D-AAAD-5C5C929934B3; ps_l=1; ps_n=1; fbm_124024574287414=base_domain=.instagram.com; ig_nrcb=1; ig_direct_region_hint="VLL\\05449282885844\\0541760048280:01f7399b20e704d7f6a48609d1a2bc4e1e11f0fc10052998f01ec225c4d823c141fb4d30"; csrftoken=UP5Srl1PbIGo2LlwHCRVBIsDYvxD2rSQ; ds_user_id=65086222838; sessionid=65086222838%3AnnvTf7pX8fywZD%3A25%3AAYet1p9NeZxM9sGc8ATtlMOl7FAoj2R1SenzjT51JQ; rur="EAG\\05465086222838\\0541760112498:01f74c9c245f8b2c46b511438af78c9d685b188288141d49da49e1d58fc720f2f9d5f7d6"; wd=827x812; csrftoken=kFP5Pxdr4yd7Jpzd0Be9XJMxAVDWoehc; ds_user_id=65086222838; rur="EAG\\05465086222838\\0541760112614:01f7edc1e8b8ee0f6d99b15cb2d551f4f0917d2aea715f277b481929040f2111f8c2d315"',
+    'origin': 'https://www.instagram.com',
+    'priority': 'u=1, i',
+    'referer': f'https://www.instagram.com/{username}/?hl=es',
+    'sec-ch-prefers-color-scheme': 'dark',
+    'sec-ch-ua': '"Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+    'sec-ch-ua-full-version-list': '"Google Chrome";v="129.0.6668.100", "Not=A?Brand";v="8.0.0.0", "Chromium";v="129.0.6668.100"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-model': '""',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-ch-ua-platform-version': '"14.6.1"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+    'x-asbd-id': '129477',
+    'x-bloks-version-id': '8bb50762167c4432c174a01a25b916bfc9b78985507f03558e2f04754cf7cb10',
+    'x-csrftoken': 'UP5Srl1PbIGo2LlwHCRVBIsDYvxD2rSQ',
+    'x-fb-friendly-name': 'PolarisProfilePostsQuery',
+    'x-fb-lsd': 'T_FkSMEN_zVrruSDga-ofO',
+    'x-ig-app-id': '936619743392459'
+  }
+
+  response = requests.request("POST", url, headers=headers, data=payload)
+  r = response.json()
+
+  posts = r['data']['xdt_api__v1__feed__user_timeline_graphql_connection']['edges']
+  data = []
+
+  for post in posts:
     
-    return title
+    code = post['node']['code']
+    codes.append(code)
 
+    media_id = post['node']['pk']
+    media_ids.append(media_id
+                     )
+    title = post['node']['caption']['text']
+    titles.append(title)
 
-#function to try and retrieve comments:
-def get_comments(driver):
-    
-    try:
-        comment = driver.find_elements(By.XPATH, '//ul[@class="_a9z6 _a9za"]/div[3]/div/div/div')
-        comments = len(comment)
-    except:
-        comments = '0'
+    like_count = post['node']['like_count']
+    likes_count.append(like_count)
 
-    return comments
+    comment_count = post['node']['comment_count']
+    comment_counts.append(comment_count)
 
-#Function that retrieves likes:
-def get_likes(driver):
-    
-    try:
-        like = driver.find_element(By.XPATH, '//span[@class="x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs xt0psk2 x1i0vuye xvs91rp x1s688f x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj"]').text
-    except:
-        like = '0'
-
-    likes_pattern = re.compile(r'^\d+ likes$')
-    if likes_pattern.match(like):
-        like = like.replace(' likes', '')
-
-    return like
-
-
-username = "danielrobl3s"
-password = "Don't fucking scam me 89"
-
-total_titles = []
-total_likes = []
-comments = []
-prefix = 'https://www.instagram.com/'
-site = input('Type the instagram profile you want to scrape: ')
-name = input('Name your csv file: ')
-
-options = webdriver.ChromeOptions()
-driver = webdriver.Chrome(options=options)
-
-stealth(driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True,
-       )
-
-driver.get(prefix)
-
-time.sleep(10)
-
-username = driver.find_element(By.XPATH, '//input[@type="text"]').send_keys(username)
-password = driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(password)
-
-time.sleep(5)
-
-submit_button = driver.find_element(By.XPATH, '//button[@class=" _acan _acap _acas _aj1- _ap30"]')
-submit_button.click()
-
-time.sleep(10)
-
-not_now_button = driver.find_element(By.XPATH, '//div[@role="button"]')
-not_now_button.click()
-
-time.sleep(10)
-
-not_now_again = driver.find_element(By.XPATH, '//button[@class="_a9-- _ap36 _a9_1"]')
-not_now_again.click()
-
-time.sleep(5)
-
-search = driver.find_element(By.XPATH, '//div[@class="x1iyjqo2 xh8yej3"]/div[2]/span')
-search.click()
-
-time.sleep(5)
-
-input_search = driver.find_element(By.XPATH, '//input[@aria-label="Search input"]').send_keys(site)
-time.sleep(4)
-
-profile = driver.find_element(By.XPATH, '//a[@class="x1i10hfl x1qjc9v5 xjbqb8w xjqpnuy xa49m3k xqeqjp1 x2hbi6w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x87ps6o x1lku1pv x1a2a7pz x1dm5mii x16mil14 xiojian x1yutycm x1lliihq x193iq5w xh8yej3"][1]')
-profile.click()
-
-time.sleep(10)
-
-links = driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]//div/a')
-
-for link in links:
-    link.click()
-
-    time.sleep(10)
-
-    title = get_title()
-    total_titles.append(title)
-    like = get_likes(driver)
-    total_likes.append(like)
-    comment = get_comments(driver)
+    comment = get_post_comments(code, media_id)
     comments.append(comment)
 
-    go_back = driver.find_element(By.XPATH, '//div[@class="x160vmok x10l6tqk x1eu8d0j x1vjfegm"]//div//div')
-    go_back.click()
-    time.sleep(3)
+    if post['node']['video_versions'] == None:
+      is_video = "False"
+      videos.append(is_video)
+    else:
+      is_video = "True"
+      videos.append(is_video)
 
-print(total_titles)
-print(total_likes)
-print(comments)
+    taken_at = post['node']['taken_at']
+    dates.append(taken_at)
 
-with open(f'{name}.csv', 'w', encoding='utf-8') as file:
-    fieldnames = ['Title', 'Likes', 'Comments']
-    writer = csv.DictWriter(file, fieldnames=fieldnames)
-    writer.writeheader()
+    data.append({"code": code, "media_id": media_id, "title": title, "likes_count": like_count, "comment_count": comment_count, "comments": comments, "is_video?": is_video, "taken_at": taken_at})
 
-    for data in zip(total_titles, total_likes, comments):
-        writer.writerow({"Title": data[0], "Likes": data[1], "Comments": data[2]})
+  return data
+
+
+
+
+def get_post_comments(code, media_id):
+
+  url = f"https://www.instagram.com/api/v1/media/{media_id}/comments/?can_support_threading=true&permalink_enabled=false&hl=es"
+
+  payload = {}
+  headers = {
+    'accept': '*/*',
+    'accept-language': 'es-419,es;q=0.9',
+    'cookie': 'mid=ZwRUWQAEAAEkOkvuteNAO2TdW--K; datr=WVQEZ9otxSdrW3lboj2lt3LI; ig_did=B52CEFC3-E13F-469D-AAAD-5C5C929934B3; ps_l=1; ps_n=1; fbm_124024574287414=base_domain=.instagram.com; ig_nrcb=1; ig_direct_region_hint="VLL\\05449282885844\\0541760048280:01f7399b20e704d7f6a48609d1a2bc4e1e11f0fc10052998f01ec225c4d823c141fb4d30"; csrftoken=UP5Srl1PbIGo2LlwHCRVBIsDYvxD2rSQ; ds_user_id=65086222838; sessionid=65086222838%3AnnvTf7pX8fywZD%3A25%3AAYefYpfnHjeVINjfMowufGCC1f5fEQskylMhV5PLmA; wd=827x812; rur="CCO\\05465086222838\\0541760111534:01f7831ebb2b9d64f00a47af48cc2b6ee322bb36e28df2bfbeaaedd15e0108d2abaa72ad"; csrftoken=kFP5Pxdr4yd7Jpzd0Be9XJMxAVDWoehc; ds_user_id=65086222838; rur="EAG\\05465086222838\\0541760111816:01f7b6f9026d872ddbf7b2de8dff6e97b320c70180bdd00e82d17b957b7537088d71a624"',
+    'priority': 'u=1, i',
+    'referer': f'https://www.instagram.com/p/{code}/?hl=es&img_index=1',
+    'sec-ch-prefers-color-scheme': 'dark',
+    'sec-ch-ua': '"Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+    'sec-ch-ua-full-version-list': '"Google Chrome";v="129.0.6668.100", "Not=A?Brand";v="8.0.0.0", "Chromium";v="129.0.6668.100"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-model': '""',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-ch-ua-platform-version': '"14.6.1"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+    'x-asbd-id': '129477',
+    'x-csrftoken': 'UP5Srl1PbIGo2LlwHCRVBIsDYvxD2rSQ',
+    'x-ig-app-id': '936619743392459',
+    'x-ig-www-claim': 'hmac.AR2RG47XxdXMhIam1qJFqgw-V6mdxVIlnsL-3H1ziOQJARRC',
+    'x-requested-with': 'XMLHttpRequest'
+  }
+
+  response = requests.request("GET", url, headers=headers, data=payload)
+  r = response.json()
+
+  users = []
+  texts = []
+  commentos = r['comments']
+
+
+  for comment in commentos:
+    users.append(comment['user']['username'])
+    texts.append(comment['text'])
+  
+  return {'users_that_commented': users, "comments": texts}
+
+
+
+
+platzi = get_user_posts('platzi')
+
+print(platzi)
