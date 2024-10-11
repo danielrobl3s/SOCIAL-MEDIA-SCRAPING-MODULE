@@ -1,8 +1,8 @@
 import requests
 import csv
-from csv import DictWriter
+import json
 
-def get_user_posts(username):
+def get_user_posts(username, id = None, posts_count = None ):
 
   url = "https://www.instagram.com/graphql/query"
 
@@ -62,7 +62,16 @@ def get_user_posts(username):
 
     taken_at = post['node']['taken_at']
 
-    data.append({"code": code, "media_id": media_id, "title": title, "likes_count": like_count, "comment_count": comment_count, "comments": comment, "is_video?": is_video, "taken_at": taken_at})
+    data.append({"id": id, 
+                 "posts_count": posts_count, 
+                 "code": code, 
+                 "media_id": media_id, 
+                 "title": title, 
+                 "likes_count": like_count, 
+                 "comment_count": comment_count, 
+                 "comments": json.dumps(comment) if isinstance(comment, (dict, list)) else comment, 
+                 "is_video?": is_video, 
+                 "taken_at": taken_at})
 
   return data
 
@@ -191,6 +200,53 @@ def get_id_by_username(username):
   user_id = posts[0]['node']['user']['pk']
 
   return user_id
+
+
+def get_user_info_by_id(username):
+
+  id = get_id_by_username(username)
+
+  url = "https://www.instagram.com/graphql/query"
+
+  payload = f'av=17841465245145777&hl=es&__d=www&__user=0&__a=1&__req=2&__hs=20007.HYP%3Ainstagram_web_pkg.2.1..0.1&dpr=2&__ccg=GOOD&__rev=1017271733&__s=vtaq6a%3Avw7oue%3Amf79n9&__hsi=7424609472308105177&__dyn=7xe5WwlEnwn8K2Wmm1twpUnwgU7S6EdF8aUco38w5ux60p-0LVE4W0om782Cw8G11wBw5Zx62G3i1ywOwa90Fw4Hw9O0Lbwae4UaEW2G0AEco5G0zEnwhE3fw5rwSyES1Twoob82ZwrUdUbGw4mwr86C1mwrd6goK10xKi2K7E5yqcxK2K0Pay8&__csr=jPY7Dn5mxJObparjdm8mF_ACmAB-LGiEVGh5gC9QjLDKAaKmXDHh_FuGpbByq-7Ux1abAKdyUKbxOUdEyqaWVEB2UaoyiiazF8W6opDyoW13wKBDzoyq00jxe0BFQaCwcmq0o60c9wrE3KwHw1ZO8yE2Xw2Zojig7-reEhgjU1nodo14A0zo6Lg1lU56cg19U26wczwau01XNw&__comet_req=7&fb_dtsg=NAcPGArraUPKeB3CHyv3uWkzyw2RfhBTEnBAnmky361ftXC-eyh2wAw%3A17843676607167008%3A1728527552&jazoest=26372&lsd=sPOIIlygKJNN3E4VV86ZvI&__spin_r=1017271733&__spin_b=trunk&__spin_t=1728676602&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=PolarisProfilePageContentQuery&variables=%7B%22id%22%3A%22{id}%22%2C%22render_surface%22%3A%22PROFILE%22%7D&server_timestamps=true&doc_id=8557171251032559'
+  headers = {
+    'accept': '*/*',
+    'accept-language': 'es-419,es;q=0.9',
+    'content-type': 'application/x-www-form-urlencoded',
+    'cookie': 'mid=ZwRUWQAEAAEkOkvuteNAO2TdW--K; datr=WVQEZ9otxSdrW3lboj2lt3LI; ig_did=B52CEFC3-E13F-469D-AAAD-5C5C929934B3; ps_l=1; ps_n=1; fbm_124024574287414=base_domain=.instagram.com; ig_nrcb=1; ig_direct_region_hint="VLL\\05449282885844\\0541760048280:01f7399b20e704d7f6a48609d1a2bc4e1e11f0fc10052998f01ec225c4d823c141fb4d30"; csrftoken=UP5Srl1PbIGo2LlwHCRVBIsDYvxD2rSQ; ds_user_id=65086222838; sessionid=65086222838%3AnnvTf7pX8fywZD%3A25%3AAYf4V9F3c1wzAb77aMmSF-rzg4Y9OSRcCHNb0b5rZdk; rur="CCO\\05465086222838\\0541760212065:01f701194bec0a71e73564225f6fdce566bc262b5ecbe014d5b13c92921a3fa5c7368baa"; wd=1902x1352; dpr=1; csrftoken=kFP5Pxdr4yd7Jpzd0Be9XJMxAVDWoehc; ds_user_id=65086222838; rur="CCO\\05465086222838\\0541760213952:01f77bab18efa6e8c8094afe19b45e9493d37bdc3592f2385f6351bd72f89df4e47602a6"',
+    'origin': 'https://www.instagram.com',
+    'priority': 'u=1, i',
+    'referer': f'https://www.instagram.com/{username}/?hl=es',
+    'sec-ch-prefers-color-scheme': 'dark',
+    'sec-ch-ua': '"Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+    'sec-ch-ua-full-version-list': '"Google Chrome";v="129.0.6668.100", "Not=A?Brand";v="8.0.0.0", "Chromium";v="129.0.6668.100"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-model': '""',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-ch-ua-platform-version': '"14.6.1"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+    'x-asbd-id': '129477',
+    'x-bloks-version-id': 'ffd7881827a24ca80324908ed0ffa180d3211290e8d957fbcbe4f2f21da22f75',
+    'x-csrftoken': 'UP5Srl1PbIGo2LlwHCRVBIsDYvxD2rSQ',
+    'x-fb-friendly-name': 'PolarisProfilePageContentQuery',
+    'x-fb-lsd': 'sPOIIlygKJNN3E4VV86ZvI',
+    'x-ig-app-id': '936619743392459'
+  }
+
+  response = requests.request("POST", url, headers=headers, data=payload)
+  r = response.json()
+
+  user = r['data']['user']['username']
+  follower_count = r['data']['user']['follower_count']
+  posts_count = r['data']['user']['media_count']
+  link_profile = headers['referer']
+
+  return id, user, follower_count, posts_count, link_profile
+  
+
 
 
 
