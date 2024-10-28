@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from connection_package import connect_to_nas_postgres, close_connection, insert_into_table, select_from_table, delete_from_table
 from instagram_scraper import get_user_info_by_id, get_id_by_username, get_user_posts, get_post_comments, get_similar_users
+from tiktok_scraper import get_tiktok_user, get_user_posts, get_video_comments, read_logs, get_tiktok_stats
 from datetime import datetime
 import pytz
 
@@ -133,6 +134,58 @@ async def delete_from_ig_posts_stats(id: int):
 
    return {"successfully deleted all posts stats with id: ": id, "username": name}
 
+
+
+@app.get("/tables/tiktok_stats/insert")
+async def insert_into_tiktok_stats(name: str, username: str):
+
+   """
+   name: Must be artist name on table singers, otherwise will throw SQL exception \n
+   Username: Must be artist tiktok username 
+   """
+
+   conn = connect()
+
+   artist_id_ = select_from_table(conn, "singers", "artist_id", f"name='{name}'")
+   artist_id = artist_id_[0][0]
+
+   tk_user, follower_count, pl = get_tiktok_user(username)
+
+   profile_link = f"https://www.tiktok.com/{username}"
+
+   insert_into_table(conn, "tiktok_stats", ["artist_id", "username", "followers_count", "profile_link"], [artist_id, str(username), str(follower_count), str(profile_link)])
+   
+   close_connection(conn)
+
+   return {"tiktok_stats_data": {"artist_id": artist_id, "username": username, "followers_count": follower_count, "profile_link": profile_link}}
+
+
+
+
+@app.get("/tables/tk_posts_stats/insert")
+async def insert_into_tk_posts_stats(username: str):
+   conn = connect()
+
+   r = select_from_table(conn, 'tiktok_stats', 'id', f"username='{username}'")
+
+
+   data = get_tiktok_stats(username)
+
+   for i in data:
+
+      tiktok_stats_id = r[0][0]
+      post_id = i['post_id']
+      caption = i['caption']
+      like_count = i['like_count']
+      comment_count = i['comments_count']
+      comments = i['comments']
+      created_at = i['created_at']
+
+      insert_into_table(conn, 'tk_posts_stats', ['tiktok_stats_id', 'post_id', 'caption', 'like_count', 'comments_count', 'comments', 'created_at'], [tiktok_stats_id, post_id, caption, like_count, comment_count, comments, created_at])
+
+   close_connection(conn)
+
+   return {"Data successfully inserted my bro!"}
 
 
 @app.get("/utils/similarusers/insert")

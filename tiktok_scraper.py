@@ -3,6 +3,8 @@ import csv
 import json
 from middleware_tk import get_user_cookies, read_json, delete_file, get_queryString, get_user_cookies_values
 import time
+from datetime import datetime
+import pytz
 
 lolazo = None
 
@@ -148,10 +150,10 @@ def read_logs(username):
             print(f'An error occurred: {e}')
 
 
-def main():
+def get_tiktok_stats(username):
 
-   username = input('Type the username of the tiktok account: ')
-   #user = get_tiktok_user(username)
+   data = []
+
    links = get_queryString(username)
 
    i = 1
@@ -174,23 +176,39 @@ def main():
       caption = item['desc']
 
       id = item['id']
-      print(item['id'])
+      print(id)
       print(caption)
-      print(item['statsV2']['diggCount'])
-      print(item['statsV2']['commentCount'])
+
+      like_count = item['statsV2']['diggCount']
+      print(like_count)
+
+      comment_count = item['statsV2']['commentCount']
+      print(comment_count)
 
       comments = any
       comments = get_video_comments(username, id)
 
       print(comments)
 
-      print(item['createTime'])
+      created_at_num = item['createTime']
+      created_at = datetime.fromtimestamp(created_at_num, tz=pytz.UTC)
+      print(created_at)
 
-      
-   
+      data.append({
+         "post_id": id,
+         "caption": caption,
+         "like_count": like_count,
+         "comments_count": comment_count,
+         "comments": json.dumps(comments) if isinstance(comments, (dict, list)) else comments,
+         "created_at": created_at})
 
-   #user = get_user_posts(username)   
+   return data
 
+
+def main():
+   #user = input('introduce yout tiktok account: ')
+   #get_tiktok_stats(user)
+   pass
 
 
 # Entry point ------------>
