@@ -1,7 +1,7 @@
 import requests
 import csv
 import json
-from testing import get_user_cookies, read_json, delete_file, get_queryString, get_user_cookies_values
+from middleware_tk import get_user_cookies, read_json, delete_file, get_queryString, get_user_cookies_values
 import time
 
 lolazo = None
@@ -48,6 +48,41 @@ def get_tiktok_user(username):
    else:
       print('Sorry!, user not found :C')
    
+   
+def get_video_comments(username, id):
+
+   url = f"https://www.tiktok.com/api/comment/list/?WebIdLastTime=1728178612&aid=1988&app_language=ja-JP&app_name=tiktok_web&aweme_id={id}&browser_language=es-419&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F130.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&count=20&current_region=JP&cursor=0&data_collection_enabled=true&device_id=7422470536956364294&device_platform=web_pc&enter_from=tiktok_web&focus_state=true&fromWeb=1&from_page=video&history_len=9&is_fullscreen=true&is_non_personalized=false&is_page_visible=true&odinId=7398293910891021318&os=mac&priority_region=MX&referer=&region=MX&screen_height=900&screen_width=1440&tz_name=America%2FMonterrey&user_is_login=true&webcast_language=es&msToken=Zx5X79YzD6_GOmBSYaFjWHPiIgCuEpTXTBcC2EccfCz6xD7-6fZnqp2BJkCtJXGlyZyz34qnjwp50tatKNYNwP_4JRmhUnehpN9tSLhjItqJRd0-YvwuEZpJUwpnTvZs_wI2nka8caRNPLCyxcnlccRu&X-Bogus=DFSzswVYH7GANjrztQNM2ELNKBT-&_signature=_02B4Z6wo00001R8MZ2AAAIDCTfNHeYrfqaEfDGPAACDh5b"
+
+   payload = {}
+   headers = {
+   'accept': '*/*',
+   'accept-language': 'es-419,es;q=0.9',
+   'cookie': 'tt_chain_token=a3rp+Clgceg1A6CA6HL62Q==; delay_guest_mode_vid=5; passport_csrf_token=4075af0f2aa93479a593d1a1c92a84d7; passport_csrf_token_default=4075af0f2aa93479a593d1a1c92a84d7; store-country-code-src=uid; last_login_method=google; _ttp=2n839FwqLfjSWs2zyIBIT3hxxSo; multi_sids=7398293910891021318%3A5803ccf7963c0aa6bcba8da2929ec88f; cmpl_token=AgQQAPNGF-RO0raS67q-qp0__WBwkzCJf4TNYNQuuw; passport_auth_status=bfd1cfabe87a783e79b1fa45d72987bd%2C3ce19fa6bc422fcf294e9258341d037b; passport_auth_status_ss=bfd1cfabe87a783e79b1fa45d72987bd%2C3ce19fa6bc422fcf294e9258341d037b; sid_guard=5803ccf7963c0aa6bcba8da2929ec88f%7C1729018505%7C15552000%7CSun%2C+13-Apr-2025+18%3A55%3A05+GMT; uid_tt=0adc6b2a2da3a84728542b6b93a105a7d273bde0eb06493c1eb45020b8adb6c2; uid_tt_ss=0adc6b2a2da3a84728542b6b93a105a7d273bde0eb06493c1eb45020b8adb6c2; sid_tt=5803ccf7963c0aa6bcba8da2929ec88f; sessionid=5803ccf7963c0aa6bcba8da2929ec88f; sessionid_ss=5803ccf7963c0aa6bcba8da2929ec88f; sid_ucp_v1=1.0.0-KDM5Nzc3ODBkOTZlMmVlZjEzNmMzY2FhZTY0ZThhNDk2ZTU4Nzg1NDUKIQiGiOG006OB1mYQifW6uAYYswsgDDC_irC1BjgIQBJIBBADGgZtYWxpdmEiIDU4MDNjY2Y3OTYzYzBhYTZiY2JhOGRhMjkyOWVjODhm; ssid_ucp_v1=1.0.0-KDM5Nzc3ODBkOTZlMmVlZjEzNmMzY2FhZTY0ZThhNDk2ZTU4Nzg1NDUKIQiGiOG006OB1mYQifW6uAYYswsgDDC_irC1BjgIQBJIBBADGgZtYWxpdmEiIDU4MDNjY2Y3OTYzYzBhYTZiY2JhOGRhMjkyOWVjODhm; store-idc=maliva; store-country-code=mx; tt-target-idc=useast1a; tt-target-idc-sign=T5P0nLa__cUlAufJC-yvMveX0L1dMaeNfMAiRRqG4RTQd9dru_mtnje89EAiyFGd_xtaW6_Cbj8XiHNTB2DQYULlJL-73fMRO5KxdZ30RoTAp-oUkHm0hPeYDLrCDHeWvllu9SW0wmE3oDfn_D9ZmuZUwdeNY1X72jecdQM7NpNkqZWMH1s7D1NX1__LMcDRvRsXaWE0swEBYHOCGeStm_S0tAiPOKX8qHqG_s9vtuEg8_YMHptjpPy9FQx3FpN4gRLazaQjvGcqInGkqFsM7oYfRwPk4q-7u1XazKB1y9mVTjXTvN3pyj409FV2zPFnaQe4RK87abIdwXgfiWfN5trAYbzdc_fboghqtKBN3fc1RmQ-QjCpe_zzeGETJpXdVpT9k3W8b3JAvnYRD-423V0vtsJvjCnp3drT9K-mx5xgF_YxMT0SYgLYEtFs1pXwr1VAmIiWgaHgY6Gi-KB5o_vBZhaBF1LTWW1HFo86ihTeW0BPxJlwJO253m62nHsy; tiktok_webapp_theme_source=auto; tiktok_webapp_theme=dark; tt_csrf_token=nvwQUkrJ-VqeJ0f6LwdX6_vC9z9KKiUEZL7U; ak_bmsc=09703F4E56E4C26B9681BB6A1A8F3E51~000000000000000000000000000000~YAAQZXlAFzMVN8GSAQAAXb08xRnDoyFr0+TP/0sjI3Q8kNbXVg2sPJkf3zyMN9Te6D5EpVUxfiOUnCwO2zvd5ZiDG2xWzsjSJcf+esyfulh7bBaH7BKP/ae3F0UBhpMzfX1GIIJCW/Y1SnOsdgCFVl039IWqdZ0xa/EmSNQiHXDa5o6QTM6XIVRy3pB7D98miYBNNyXF/S8P7/9qHSAGN5HTBjeP4I/Wwy58M0lzGAdIGU8mtYyNQtQkAtQB3F36HAYMITZzVCtTRP8AA1d7+Ji4IR8b4sBx1A3MmedNl2bYBZnNBXbhtVPUJrVxyKvyIYPWAH6uAgHCROBl2X0EgnGLcrVXwCX86sFALh08FFkjIHh3QhOEJRyaaxDkXSuG60nnEBo/KEcXuA==; passport_fe_beating_status=true; odin_tt=33a4abb9d6d5c1af7d460e1b2a893bdd95fb17b19d89cbb79d091f6b10fa1b7d7001ab3ecd4d33e4ff1584c4dd55e30ca1b30e3a9b36f7b971cb2127d4b020eaa7292074ab4b5e0b27af590b0b051b42; bm_sv=AB9A9F8A5DD3742D65DC78FE20C045D8~YAAQV3lAFyTfbcCSAQAAFYCJxRngkea33wZrmHUiaatQzF3dOeeDXgFiwFDvUqlOeskOSBYtVfi23fcyYtlTO8Fopb0NCST63WJPn+G/Gad8RnrMILBRtA22xAouoAeMooXhz/U+HkKTYjHygVpctSLgb3P/TQMWD1diYVG45R86MVMyAYuQUf/OYxgSra0FsJ5x93xOPBxKrUCPHTCxXez1Jw2jdEq+QjWQSVjFjAvUttj0voPR9tzinpnAX6AE~1; ttwid=1%7CCfpB8i4ul6kmCIOwyorYXVEM-NSETzbrhXBxm_CFeew%7C1729890977%7Cd09382771fea37fa2c0617068bfcb5f7866edea8162aba8e15b23890570ecaca; msToken=-ff5irTSHB6OL4moCx2E_-F4GRA2Bl7hNh7Wk5vVRvKWexTloqw5gNNtzSRV9DBQo_85iCbjtkXg6kMn9XlT2C3i8RMKP8LXJ-bEEKiEqPXPfJ349OHZk-xr5HIfqirDuglEtPQ2VZuPmNMpRzIT3s22; msToken=Zx5X79YzD6_GOmBSYaFjWHPiIgCuEpTXTBcC2EccfCz6xD7-6fZnqp2BJkCtJXGlyZyz34qnjwp50tatKNYNwP_4JRmhUnehpN9tSLhjItqJRd0-YvwuEZpJUwpnTvZs_wI2nka8caRNPLCyxcnlccRu; msToken=6vItUDRj3uA8wEo0lo4echjMic_rUxSH-At8QIMOqw3J9CoA5q1KzA1-Jsqj9J6eccwyZlGwD8jxYJ3Yeh1fm2RP32j2OGQEFuBzMlYfVr9F7jq-U6WppmP6oBnJAvF5Qtknzj3Df8ibW_PX8kOSjcsc; odin_tt=1f5f17f3994b3d8b4f2c2bb696eedcb08dd3c1c4b63231e18c4106c8c7885b686206b1405fbf59fc0e8b3500425e1d2c7250b1044efa76514ccafc24ac66c55884836b8467e43c1e856013ac5a9d0753; store-country-code=mx; store-country-code-src=uid; store-idc=maliva; tt-target-idc=useast1a',
+   'priority': 'u=1, i',
+   'referer': f'https://www.tiktok.com/@{username}/video/{id}',
+   'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
+   'sec-ch-ua-mobile': '?0',
+   'sec-ch-ua-platform': '"macOS"',
+   'sec-fetch-dest': 'empty',
+   'sec-fetch-mode': 'cors',
+   'sec-fetch-site': 'same-origin',
+   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+   }
+
+   response = requests.request("GET", url, headers=headers, data=payload)
+
+   r = response.json()
+
+   cments = r['comments']
+   comments = []
+
+   for comment in cments:
+      text = comment['text']
+      user = comment['user']['nickname']
+
+      comments.append({'user_that_commented': user, 'text': text})
+   
+   return comments
 
 
 def get_user_posts(username, url):
@@ -136,7 +171,22 @@ def main():
    items = json_file['itemList']
 
    for item in items:
-      print(item['desc'])
+      caption = item['desc']
+
+      id = item['id']
+      print(item['id'])
+      print(caption)
+      print(item['statsV2']['diggCount'])
+      print(item['statsV2']['commentCount'])
+
+      comments = any
+      comments = get_video_comments(username, id)
+
+      print(comments)
+
+      print(item['createTime'])
+
+      
    
 
    #user = get_user_posts(username)   
