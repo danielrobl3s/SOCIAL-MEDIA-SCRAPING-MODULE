@@ -129,7 +129,7 @@ class Driver:
             else:
                 raise Exception("Invalid proxy list")
 
-        driver_service = Service('chromedriver-mac-arm64/chromedriver')
+        driver_service = Service('chromedriver-win64/chromedriver.exe')
         driver = webdriver.Chrome(options=options, service=driver_service)
 
         if random.randint(0, 1) == 1:
