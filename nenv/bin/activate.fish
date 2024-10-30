@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/postadurango/Desktop/rapid api/nenv"
+set -gx VIRTUAL_ENV "/Users/postadurango/Desktop/social-media-scraping-module/nenv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

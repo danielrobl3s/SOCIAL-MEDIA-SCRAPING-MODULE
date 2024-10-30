@@ -1,4 +1,4 @@
-#!/Users/postadurango/Desktop/rapid api/nenv/bin/python3.12
+#!/Users/postadurango/Desktop/social-media-scraping-module/nenv/bin/python3.12
 # -*- coding: utf-8 -*-
 import argparse
 import sys
