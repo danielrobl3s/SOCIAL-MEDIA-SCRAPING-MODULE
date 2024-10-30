@@ -114,7 +114,7 @@ class Driver:
 
         browsermob_proxy = None
         if capture_har:
-            server = Server("browsermob-proxy-2.1.4/bin/browsermob-proxy")
+            server = Server("browsermob-proxy-2.1.4/bin/browsermob-proxy.bat")
             server.start()
             browsermob_proxy = server.create_proxy()
             options.add_argument(f'--proxy-server={browsermob_proxy.proxy}')
