@@ -114,10 +114,10 @@ class Driver:
 
         browsermob_proxy = None
         if capture_har:
-            server = Server("browsermob-proxy-2.1.4/bin/browsermob-proxy")
+            server = Server("browsermob-proxy-2.1.4/bin/browsermob-proxy.bat")
             server.start()
             browsermob_proxy = server.create_proxy()
-            options.add_argument(f'--proxy-server={browsermob_proxy.proxy}')
+            options.add_argument(f'--proxy-server=http://localhost:8080g')
             options.add_argument('--ignore-certificate-errors') 
             options.add_argument('--disable-web-security') 
 
@@ -129,7 +129,7 @@ class Driver:
             else:
                 raise Exception("Invalid proxy list")
 
-        driver_service = Service('chromedriver-mac-arm64/chromedriver')
+        driver_service = Service('chromedriver-win64/chromedriver.exe')
         driver = webdriver.Chrome(options=options, service=driver_service)
 
         if random.randint(0, 1) == 1:

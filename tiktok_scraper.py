@@ -206,9 +206,8 @@ def get_tiktok_stats(username):
 
 
 def main():
-   #user = input('introduce yout tiktok account: ')
-   #get_tiktok_stats(user)
-   pass
+   user = input('introduce yout tiktok account: ')
+   get_tiktok_stats(user)
 
 
 # Entry point ------------>
