@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from connection_package import connect_to_nas_postgres, close_connection, insert_into_table, select_from_table, delete_from_table
 from instagram_scraper import get_user_info_by_id, get_id_by_username, get_user_posts, get_post_comments, get_similar_users
-from tiktok_scraper import get_tiktok_user, get_user_posts, get_video_comments, read_logs, get_tiktok_stats
+from tiktok_scraper import get_tiktok_user, get_user_posts_tk, get_video_comments, read_logs, get_tiktok_stats
 from datetime import datetime
 import pytz
 
@@ -106,7 +106,7 @@ async def insert_into_ig_posts_stats(name: str):
    username = results2[0][1]
    instagram_stats_id = results2[0][2]
 
-   posts = get_user_posts(username, instagram_stats_id, posts_count)
+   posts = get_user_posts(username, id=instagram_stats_id, posts_count=posts_count)
 
    for post in posts:
 

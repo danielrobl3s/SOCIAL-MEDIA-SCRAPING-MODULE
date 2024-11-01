@@ -87,7 +87,7 @@ def get_video_comments(username, id):
    return comments
 
 
-def get_user_posts(username, url):
+def get_user_posts_tk(username, url):
 
    payload = {}
    headers = {
@@ -158,7 +158,7 @@ def get_tiktok_stats(username):
 
    i = 1
    for link in links:
-      file = get_user_posts(username, url=link)
+      file = get_user_posts_tk(username, url=link)
 
       with open(f'{username}_output_link_{i}.json', 'w') as f:
          json.dump(file, f)

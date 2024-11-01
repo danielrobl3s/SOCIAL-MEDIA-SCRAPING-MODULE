@@ -2,7 +2,7 @@ import requests
 import csv
 import json
 
-def get_user_posts(username, id = None, posts_count = None ):
+def get_user_posts(username, id=None, posts_count=None):
 
   url = "https://www.instagram.com/graphql/query"
 
