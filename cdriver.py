@@ -1,11 +1,33 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from browsermobproxy import Server
 from csv import DictReader
-
 import random, time, zipfile, json
 from selenium_stealth import stealth
+from mitmproxy import http, ctx
+import time
+import subprocess
+
+class CaptureTraffic:
+    def __init__(self):
+        self.counter = 0
+
+    def response(self, flow: http.HTTPFlow) -> None:
+        
+        self.counter += 1
+        filename = f"response_{self.counter}.json"
+        with open(filename, "w") as f:
+            f.write(flow.response.text)
+        ctx.log.info(f"Saved response to {filename}")
+
+
+def start_mitmproxy():
+
+    mitmproxy_process = subprocess.Popen([
+        "mitmdump", "-s", __file__ 
+    ])
+    time.sleep(5)
+    return mitmproxy_process
 
 class Driver:
    
@@ -100,7 +122,7 @@ class Driver:
 
 
    @staticmethod
-   def get(url='https://google.com', headless=False, proxy=False, capture_har=False, cookies=False):
+   def get(url='https://google.com', headless=False, proxy=False, capture=False, cookies=False):
         options = Options()
         
         if headless:
@@ -112,14 +134,11 @@ class Driver:
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
 
-        browsermob_proxy = None
-        if capture_har:
-            server = Server("browsermob-proxy-2.1.4/bin/browsermob-proxy.bat")
-            server.start()
-            browsermob_proxy = server.create_proxy()
-            options.add_argument(f'--proxy-server=http://localhost:8080')
-            options.add_argument('--ignore-certificate-errors') 
-            options.add_argument('--disable-web-security') 
+        prox = "http://127.0.0.1:8080"
+
+        if capture:
+             mitmproxy_process = start_mitmproxy()
+             options.add_argument(f"--proxy-server=http://{proxy}")
 
         elif proxy:
             if not isinstance(proxy, list):
@@ -141,8 +160,6 @@ class Driver:
 
         stealth(driver, languages=['en-US', 'en', 'de-DE', 'de'], vendor='Google Inc.', platform='x64', webgl_vendor=w_vendor, renderer=render, fix_hairline=True)
 
-        if capture_har:
-            browsermob_proxy.new_har("test", options={'captureHeaders': True, 'captureContent': True})
 
         driver.get(url)
 
@@ -158,17 +175,9 @@ class Driver:
         time.sleep(60)
         print('Now!')
 
-        if capture_har:
-            har = browsermob_proxy.har
-
-            result = json.dumps(har, indent=2)
-
-            file = "params.json"
-            with open(file, "w") as f:
-                f.write(result)
-            server.stop()
-
-            return driver, file
+        if capture:
+            driver.quit()
+            mitmproxy_process.terminate()
 
 
         return driver
