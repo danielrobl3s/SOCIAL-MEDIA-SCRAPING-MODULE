@@ -5,7 +5,7 @@ import sys
 def connect_to_nas_postgres():
     # Connection parameters
     params = {
-        'host': '189.155.95.81',    #'host': '189.155.95.81',  # Replace with your NAS's IP address
+        'host': '189.155.79.208',    #'host': '189.155.79.208',  # Replace with your NAS's IP address
         'port': 49153,           # The mapped port for PostgreSQL
         'database': 'househits',      # The database name
         'user': 'postgres',      # The database user
