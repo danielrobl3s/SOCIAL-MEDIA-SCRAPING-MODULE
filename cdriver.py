@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from browsermobproxy import Server
 from csv import DictReader
-
+from selenium.webdriver import ActionChains
 import random, time, zipfile, json
 from selenium_stealth import stealth
 
@@ -100,7 +100,8 @@ class Driver:
 
 
    @staticmethod
-   def get(url='https://google.com', headless=False, proxy=False, capture_har=False, cookies=False):
+   def get(url='https://google.com', headless=False, proxy=False, capture_har=False, cookies=False, cookies_fb=False,
+           scroll=False):
         options = Options()
         
         if headless:
@@ -153,6 +154,20 @@ class Driver:
                  driver.add_cookie(i)
             
             driver.refresh()
+            
+        if cookies_fb:
+             cookies_fb_ = Driver.get_user_cookies_values('facebook_cookies.csv')
+
+             for i in cookies_fb_:
+                  driver.add_cookie(i)
+
+             driver.refresh()
+
+        if scroll:
+            actions = ActionChains(driver)
+            for _ in range(25):  
+                actions.send_keys('\ue00f').perform() 
+                time.sleep(1)
 
         print("Go 'head and pass the captcha")
         time.sleep(60)
