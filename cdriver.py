@@ -147,6 +147,8 @@ class Driver:
 
         driver.get(url)
 
+        time.sleep(5)
+
         if cookies:
             cookies_ = Driver.get_user_cookies_values('tiktok_session.csv')
 
