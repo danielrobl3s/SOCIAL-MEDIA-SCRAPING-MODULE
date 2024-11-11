@@ -101,7 +101,7 @@ class Driver:
 
    @staticmethod
    def get(url='https://google.com', headless=False, proxy=False, capture_har=False, cookies=False, cookies_fb=False,
-           scroll=False):
+           scroll=False, fb_request=False, fb_headers=None, fb_params=None):
         options = Options()
         
         if headless:
@@ -129,6 +129,10 @@ class Driver:
                 options.add_extension(Driver.get_proxy(proxy))
             else:
                 raise Exception("Invalid proxy list")
+            
+        if fb_request:
+            for key, value in fb_headers.items():
+                options.add_argument(f'--header={key}={value}')
 
         driver_service = Service('chromedriver-mac-arm64/chromedriver')
         driver = webdriver.Chrome(options=options, service=driver_service)
