@@ -12,7 +12,37 @@ from lxml import etree
 import json
 import re
 
-def extract_json(response_text, x):
+def catch_reactions(reactions_i):
+
+   for i in reactions_i:
+      
+      
+      if i["node"]["localized_name"] == "Me gusta":
+
+         like_count = i["reaction_count"]
+      elif i["node"]["localized_name"] == "Me encanta":
+
+         love_count = i["reaction_count"]
+      elif i["node"]["localized_name"] == "Me importa":
+
+         care_count = i["reaction_count"]
+      elif i["node"]["localized_name"] == "Me divierte":
+
+         haha_count = i["reaction_count"]
+      elif i["node"]["localized_name"] == "Me asombra":
+
+         surprise_count = i["reaction_count"]
+      elif i["node"]["localized_name"] == "Me entristece":
+
+         sad_count = i["reaction_count"]
+      elif i["node"]["localized_name"] == "Me enoja":
+
+         angry_count = i["reaction_count"]
+
+   return like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count
+
+
+def extract_json(username, response_text, x):
       # Find the first occurrence of "]}}}}}"
    end_index = response_text.find("]}}}}}") + len("]}}}}}")
 
@@ -25,13 +55,76 @@ def extract_json(response_text, x):
          parsed_data = json.loads(first_section)
          
          # Now you can write it to a file or process it as needed
-         with open(f"file_output_{x}.json", "w", newline='') as f:
+         with open(f"{username}_output_{x}.json", "w", newline='') as f:
                json.dump(parsed_data, f, indent=4)
       
       except json.JSONDecodeError as e:
          print(f"JSON decoding error: {e}")
    else:
       print("The end sequence was not found in the response.")
+
+
+def read_logs(username):
+   i = range(0,51)
+
+   for x in i:
+
+      try:
+         with open(f'{username}_output_{x}.json', 'r') as f:
+
+            data = json.load(f)
+                
+            try:   
+               title = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["content"]["story"]["message"]["text"]
+            except:
+               title = "not found"
+
+
+            try:
+               reactions_count = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["reaction_count"]["count"]
+            except:
+               reactions_count = "not found"
+
+            
+            reactions_i = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["top_reactions"]["edges"]
+
+            try:
+               like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count = catch_reactions(reactions_i)
+            except:
+               like_count = "Exact number not found"
+               love_count = "Exact number not found"
+               care_count = "Exact number not found"
+               haha_count = "Exact number not found"
+               surprise_count = "Exact number not found"
+               sad_count = "Exact number not found"
+               angry_count = "Exact number not found"
+
+            try:   
+               comments_count = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comment_rendering_instance"]["comments"]["total_count"]
+            except:
+               comments_count = "not found"
+
+
+            try:
+               comments =  data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["body"]["text"]
+               user_that_commented = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["author"]["name"]
+
+               commentz = {"user_that_commented": user_that_commented, "comment": comments}
+            except:
+               commentz = "not found"
+            
+
+            is_video = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["video_view_count"]
+            if is_video == None:
+               is_video = False
+            else:
+               is_video = True
+
+            print("title: " +str(title) + " reactions count: " + str(reactions_count) + " like_count: "+str(like_count)+" love_count: "+str(love_count)+" care_count: "+str(care_count)+ " haha_count: "+str(haha_count)+" surprise_count: "+str(surprise_count)+" sad_count: "+str(sad_count)+" angry_count: "+str(angry_count)+"  comments_count: "+ str(comments_count) + " comments: " + str(commentz) + " is_video: "+ str(is_video))
+         
+      except:
+         print("No existing file in here")
+
 
 
 def delete_file(f_path):
@@ -113,9 +206,8 @@ def turn_numbers(number):
 
 
 
-def get_user_posts():
-   username = input("Introduce the Facebook account you want to scrape: ")
-
+def get_user_posts(username):
+   
    driver, file = Driver.get(f"https://facebook.com/{username}", headless=True, capture_har=True, cookies_fb=True, scroll=True)
    html = driver.page_source
    links, headers, paramets = get_Querystring()
@@ -154,15 +246,8 @@ def get_user_posts():
          
          json_data = response.text
 
-         extract_json(json_data, x)
-
-         """ with open(f"output_file{x}.txt", "w", newline="") as f:
-            f.write(json_data) """
-
-         """ with open(f"file_output_{x}.json", "w", newline='') as f:
-            json.dump(json.loads(json_data), f, indent=4) """
+         extract_json(username, json_data, x)
          
-
    except Exception as e: 
      print(f'something went wrong :( : {e}')
           
@@ -170,8 +255,8 @@ def get_user_posts():
    
 
 
-def get_user():
-   username = input("Introduce the Facebook account you want to scrape: ")
+def get_user(username):
+   
 
    driver, file = Driver.get(f"https://facebook.com/{username}", capture_har=True, cookies_fb=True)
    html = driver.page_source
@@ -206,5 +291,8 @@ def main():
    pass
 
 if __name__ == "__main__":
+   username = input("Introduce the Facebook account you want to scrape: ")
+
    delete_file('params.json')
-   get_user_posts()
+   get_user_posts(username)
+   read_logs(username)
