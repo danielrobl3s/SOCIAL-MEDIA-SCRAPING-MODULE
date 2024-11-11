@@ -12,19 +12,26 @@ from lxml import etree
 import json
 import re
 
-def decompress_streamed_data(response):
-    
-    try:
-        
+def extract_json(response_text, x):
+      # Find the first occurrence of "]}}}}}"
+   end_index = response_text.find("]}}}}}") + len("]}}}}}")
 
-        # Use the content of the response, which is the raw bytes
-        dctx = zstd.ZstdDecompressor()
-        decompressed_data = dctx.decompress(response.content)
-        return decompressed_data
-    except zstd.ZstdError as e:
-        print("Decompression error:", e)
-        return None
-
+   if end_index > -1:
+      # Slice the string up to the first complete JSON segment
+      first_section = response_text[:end_index]
+      
+      try:
+         # Load the JSON from this first section
+         parsed_data = json.loads(first_section)
+         
+         # Now you can write it to a file or process it as needed
+         with open(f"file_output_{x}.json", "w", newline='') as f:
+               json.dump(parsed_data, f, indent=4)
+      
+      except json.JSONDecodeError as e:
+         print(f"JSON decoding error: {e}")
+   else:
+      print("The end sequence was not found in the response.")
 
 
 def delete_file(f_path):
@@ -145,25 +152,19 @@ def get_user_posts():
          
          response = requests.request("POST", url=links[x], headers=header, data=pload)
          
-         print(response.text)
+         json_data = response.text
 
-         with open(f"file_output_{x}.txt", "w", newline='') as f:
-            f.write(response.text)
+         extract_json(json_data, x)
+
+         """ with open(f"output_file{x}.txt", "w", newline="") as f:
+            f.write(json_data) """
+
+         """ with open(f"file_output_{x}.json", "w", newline='') as f:
+            json.dump(json.loads(json_data), f, indent=4) """
          
 
-
-         
-
-      """ response = requests.post(links[x], headers=header, data=encoded_params)
-      if response.status_code == 200:
-             print(f"Request to {links[x]} was successful.")
-             # Process the response (e.g., extract JSON, HTML, etc.)
-             print(response.text)  # Or any other logic you want to apply
-      else:
-            print(f"Failed to fetch {links[x]}, Status code: {response.status_code}") """
-
-   except: 
-     print('something went wrong :(')
+   except Exception as e: 
+     print(f'something went wrong :( : {e}')
           
 
    
