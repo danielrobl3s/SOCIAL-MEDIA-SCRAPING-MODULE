@@ -1,5 +1,8 @@
 import gzip
+from urllib.parse import quote
+import zstandard as zstd
 import zlib
+import brotli
 import requests
 from cdriver import Driver
 import time
@@ -8,6 +11,21 @@ from bs4 import BeautifulSoup
 from lxml import etree
 import json
 import re
+
+def decompress_streamed_data(response):
+    
+    try:
+        
+
+        # Use the content of the response, which is the raw bytes
+        dctx = zstd.ZstdDecompressor()
+        decompressed_data = dctx.decompress(response.content)
+        return decompressed_data
+    except zstd.ZstdError as e:
+        print("Decompression error:", e)
+        return None
+
+
 
 def delete_file(f_path):
 
@@ -91,32 +109,62 @@ def turn_numbers(number):
 def get_user_posts():
    username = input("Introduce the Facebook account you want to scrape: ")
 
-   driver, file = Driver.get(f"https://facebook.com/{username}", capture_har=True, cookies_fb=True, scroll=True)
+   driver, file = Driver.get(f"https://facebook.com/{username}", headless=True, capture_har=True, cookies_fb=True, scroll=True)
    html = driver.page_source
    links, headers, paramets = get_Querystring()
 
-   for i in range(len(links)):
-      url = links[i]
-      header = {item['name']: item['value'] for item in headers[i]} 
-      params = {param['name']: param['value'] for param in paramets[i]['params']}
+   rango = range(len(links))
 
-      print(url, header, params)
+   payload = []
 
-      try:
-        response = requests.post(url, headers=header, data=params)
-        
-        # Check if the response is compressed
-        if response.headers.get('Content-Encoding') == 'gzip':
-            response_data = gzip.decompress(response.content)
-            print(response_data)
-        elif response.headers.get('Content-Encoding') == 'deflate':
-            response_data = zlib.decompress(response.content)
-            print(response_data)
-        else:
-            response_data = response.content
-            print(response_data)
-      except:
-         pass
+   try:
+      for x in rango:
+         print(x)
+
+            # Convert headers to a dictionary
+         header = {item['name']: item['value'] for item in headers[x]}
+            
+            # Convert paramets to a dictionary
+         params = {param['name']: param['value'] for param in paramets[x]['params']}
+
+         #print(links[x], header, params)
+
+         if "Accept-Encoding" in header.keys():
+            header.pop('Accept-Encoding')
+            print(header)
+
+         pload = ''
+
+         for key, value in params.items():
+            pload = pload + str(key) + '=' + str(value) + '&'
+         
+         if pload.endswith('&'):
+            pload = pload[:-1]
+
+         print(pload)
+         
+         response = requests.request("POST", url=links[x], headers=header, data=pload)
+         
+         print(response.text)
+
+         with open(f"file_output_{x}.txt", "w", newline='') as f:
+            f.write(response.text)
+         
+
+
+         
+
+      """ response = requests.post(links[x], headers=header, data=encoded_params)
+      if response.status_code == 200:
+             print(f"Request to {links[x]} was successful.")
+             # Process the response (e.g., extract JSON, HTML, etc.)
+             print(response.text)  # Or any other logic you want to apply
+      else:
+            print(f"Failed to fetch {links[x]}, Status code: {response.status_code}") """
+
+   except: 
+     print('something went wrong :(')
+          
 
    
 
