@@ -115,7 +115,7 @@ class Driver:
 
         browsermob_proxy = None
         if capture_har:
-            server = Server("browsermob-proxy-2.1.4/bin/browsermob-proxy")
+            server = Server("FULL_PATH + browsermob-proxy-2.1.4/bin/browsermob-proxy")
             server.start()
             browsermob_proxy = server.create_proxy()
             options.add_argument(f'--proxy-server={browsermob_proxy.proxy}')
@@ -134,7 +134,7 @@ class Driver:
             for key, value in fb_headers.items():
                 options.add_argument(f'--header={key}={value}')
 
-        driver_service = Service('chromedriver-mac-arm64/chromedriver')
+        driver_service = Service('FULL_PATH + chromedriver-mac-arm64/chromedriver')
         driver = webdriver.Chrome(options=options, service=driver_service)
 
         if random.randint(0, 1) == 1:
