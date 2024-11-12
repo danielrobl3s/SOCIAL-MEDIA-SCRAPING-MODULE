@@ -14,30 +14,66 @@ import re
 
 def catch_reactions(reactions_i):
 
+   like_count = "not found"
+   love_count = "not found"
+   care_count = "not found"
+   haha_count = "not found"
+   surprise_count = "not found"
+   sad_count = "not found"
+   angry_count = "not found"
+
    for i in reactions_i:
       
+      try:
+         if i["node"]["localized_name"] == "Me gusta":
+
+            like_count = i["reaction_count"]
+      except:
+         pass
+
+      try:
+         if i["node"]["localized_name"] == "Me encanta":
+
+            love_count = i["reaction_count"]
+      except:
+            pass
       
-      if i["node"]["localized_name"] == "Me gusta":
+      try:
+         if i["node"]["localized_name"] == "Me importa":
 
-         like_count = i["reaction_count"]
-      elif i["node"]["localized_name"] == "Me encanta":
+            care_count = i["reaction_count"]
+      except:
+            pass
 
-         love_count = i["reaction_count"]
-      elif i["node"]["localized_name"] == "Me importa":
+      try:
 
-         care_count = i["reaction_count"]
-      elif i["node"]["localized_name"] == "Me divierte":
+         if i["node"]["localized_name"] == "Me divierte":
 
-         haha_count = i["reaction_count"]
-      elif i["node"]["localized_name"] == "Me asombra":
+            haha_count = i["reaction_count"]
+      except:
 
-         surprise_count = i["reaction_count"]
-      elif i["node"]["localized_name"] == "Me entristece":
+            pass
+      
+      try:
+         if i["node"]["localized_name"] == "Me asombra":
 
-         sad_count = i["reaction_count"]
-      elif i["node"]["localized_name"] == "Me enoja":
+            surprise_count = i["reaction_count"]
+      except:
+            pass
 
-         angry_count = i["reaction_count"]
+      try:      
+         if i["node"]["localized_name"] == "Me entristece":
+
+            sad_count = i["reaction_count"]
+      except:
+            pass
+
+      try:
+         if i["node"]["localized_name"] == "Me enoja":
+
+            angry_count = i["reaction_count"]
+      except:
+            pass
 
    return like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count
 
@@ -67,6 +103,8 @@ def extract_json(username, response_text, x):
 def read_logs(username):
    i = range(0,51)
 
+   pack_data = []
+
    for x in i:
 
       try:
@@ -88,16 +126,7 @@ def read_logs(username):
             
             reactions_i = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["top_reactions"]["edges"]
 
-            try:
-               like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count = catch_reactions(reactions_i)
-            except:
-               like_count = "Exact number not found"
-               love_count = "Exact number not found"
-               care_count = "Exact number not found"
-               haha_count = "Exact number not found"
-               surprise_count = "Exact number not found"
-               sad_count = "Exact number not found"
-               angry_count = "Exact number not found"
+            like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count = catch_reactions(reactions_i)
 
             try:   
                comments_count = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comment_rendering_instance"]["comments"]["total_count"]
@@ -119,11 +148,28 @@ def read_logs(username):
                is_video = False
             else:
                is_video = True
-
-            print("title: " +str(title) + " reactions count: " + str(reactions_count) + " like_count: "+str(like_count)+" love_count: "+str(love_count)+" care_count: "+str(care_count)+ " haha_count: "+str(haha_count)+" surprise_count: "+str(surprise_count)+" sad_count: "+str(sad_count)+" angry_count: "+str(angry_count)+"  comments_count: "+ str(comments_count) + " comments: " + str(commentz) + " is_video: "+ str(is_video))
          
-      except:
-         print("No existing file in here")
+            pack_data.append({
+               "title": str(title),
+               "reactions_count": reactions_count,
+               "like_count": like_count,
+               "love_count": love_count,
+               "care_count": care_count,
+               "haha_count": haha_count,
+               "surprise_count": surprise_count,
+               "sad_count": sad_count,
+               "angry_count": angry_count,
+               "comments_count": comments_count,
+               "comments": str(commentz),
+               "is_video": is_video
+            })
+         
+
+      except Exception as e:
+         print("No existing file in here: "+str(e))
+
+   return pack_data
+   
 
 
 
@@ -295,4 +341,7 @@ if __name__ == "__main__":
 
    delete_file('params.json')
    get_user_posts(username)
-   read_logs(username)
+   data = read_logs(username)
+
+   for e in data:
+      print(e["title"]+" love_count: "+str(e["love_count"]))
