@@ -59,8 +59,6 @@ MarkupSafe
 matplotlib
 mdurl
 mitmproxy
-mitmproxy-macos
-mitmproxy_rs
 msgpack
 nltk
 numpy
