@@ -2,3 +2,5 @@
 *.csv
 *rapid api
 *test.py
+*fastapi_server
+*tiktok_session.csv
