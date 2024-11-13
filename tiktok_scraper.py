@@ -212,9 +212,16 @@ def get_tiktok_stats(username):
 
 
 def main():
-   #user = input('introduce yout tiktok account: ')
-   #get_tiktok_stats(user)
-   pass
+   user = input('introduce yout tiktok account: ')
+   data = get_tiktok_stats(user)
+   
+   with open(f"{user}_posts_tk.csv", "w", newline="") as f:
+      writer = csv.DictWriter(f, fieldnames=["post_id", "caption", "like_count", "comments_count", "comments", "created_at"])
+      writer.writeheader
+
+      for d in data:
+         writer.writerow({"post_id": d["post_id"], "caption": d["caption"], "like_count": d["like_count"], "comments_count": d["comments_count"], "comments": d["comments"], "created_at": d["created_at"]})
+      
 
 
 # Entry point ------------>

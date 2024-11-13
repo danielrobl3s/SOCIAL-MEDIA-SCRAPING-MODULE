@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from lxml import etree
 import json
 import re
+import csv
 
 def catch_reactions(reactions_i):
 
@@ -334,14 +335,19 @@ def get_user(username):
 
 
 def main():
-   pass
-
-if __name__ == "__main__":
    username = input("Introduce the Facebook account you want to scrape: ")
 
    delete_file('params.json')
    get_user_posts(username)
    data = read_logs(username)
 
-   for e in data:
-      print(e["title"]+" love_count: "+str(e["love_count"]))
+   with open(f"{username}_posts.csv", "w", newline="") as f:
+      writer = csv.DictWriter(f, fieldnames=["title", "reactions_count", "like_count", "love_count", "care_count", "haha_count", "surprise_count", "sad_count", "angry_count", "comments_count", "comments", "is_video"])
+      writer.writeheader
+
+      for d in data:
+
+         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]})
+
+if __name__ == "__main__":
+   main()
