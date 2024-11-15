@@ -1,2 +1,4 @@
 env/
 *json
+*facebook_cookies.csv
+*tiktok_session.csv
