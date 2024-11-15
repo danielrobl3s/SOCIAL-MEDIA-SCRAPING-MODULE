@@ -12,7 +12,6 @@ from lxml import etree
 import json
 import re
 import csv
-import test
 
 def catch_reactions(reactions_i):
 
@@ -266,7 +265,7 @@ def get_user_posts(username):
 def get_user(username):
    
 
-   driver, file = Driver.get(f"https://facebook.com/{username}", capture_har=True, cookies_fb=True)
+   driver, file = Driver.get(f"https://facebook.com/{username}", capture_traffic=True, cookies_fb=True)
    html = driver.page_source
 
    soup = BeautifulSoup(html, "lxml")
@@ -298,7 +297,9 @@ def get_user(username):
 def main():
    username = input("Introduce the Facebook account you want to scrape: ")
 
-   delete_file('params.json')
+   get_user(username)
+
+   """ delete_file('params.json')
    get_user_posts(username)
    data = read_logs(username)
 
@@ -308,7 +309,7 @@ def main():
 
       for d in data:
 
-         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]})
+         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]}) """
 
 if __name__ == "__main__":
    main()
