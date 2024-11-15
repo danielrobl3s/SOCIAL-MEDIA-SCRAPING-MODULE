@@ -14,24 +14,45 @@ class RequestCapture:
     def __init__(self):
         self.captured_requests = []
     
-    def request(self, flow):
+    def capture_request(self, request):
+        # Capture request details
         request_data = {
-            'url': flow.request.pretty_url,
-            'method': flow.request.method,
-            'headers': dict(flow.request.headers),
-            'params': dict(flow.request.query),
+            'url': request.url,
+            'method': request.method,
+            'headers': dict(request.headers),
+            'params': dict(request.params),
         }
-        
-        if flow.request.method == 'POST' and flow.request.content:
+
+        if request.method == 'POST' and request.body:
             try:
-                request_data['post_data'] = flow.request.get_text()
+                request_data['post_data'] = request.body.decode()
             except:
-                request_data['post_data'] = str(flow.request.content)
+                request_data['post_data'] = str(request.body)
         
-        self.captured_requests.append(request_data)
+        # Add initial request data to captured list
+        captured_request = {'request': request_data}
+        self.captured_requests.append(captured_request)
+        return len(self.captured_requests) - 1  # Return index to match with the response later
+    
+    def capture_response(self, response, request_index):
+        # Capture response details
+        response_data = {
+            'status_code': response.status_code,
+            'headers': dict(response.headers),
+        }
+
+        try:
+            response_data['content'] = response.text
+        except:
+            response_data['content'] = str(response.content)
         
+        # Merge response into the corresponding request entry
+        self.captured_requests[request_index]['response'] = response_data
+        
+        # Write to params.json
         with open('params.json', 'w') as f:
             json.dump(self.captured_requests, f, indent=2)
+
 
 
 

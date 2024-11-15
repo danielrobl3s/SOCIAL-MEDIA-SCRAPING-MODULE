@@ -12,6 +12,7 @@ from lxml import etree
 import json
 import re
 import csv
+import test
 
 def catch_reactions(reactions_i):
 
@@ -168,27 +169,14 @@ def delete_file(f_path):
 
 
 def get_Querystring(filename="params.json"):
-   with open(filename, "r") as file:
-        params = json.loads(file)
-        
-        url = any
-        links = []
-        headers = []
-        paramets = []
+   with open("params.json", "r") as file:
+      json_data = json.load(file)
 
-        for entry in params:
-      
-            if str(entry["url"]).startswith("https://www.facebook.com/api/graphql/"):
+      for entry in json_data:
+         if str(entry["url"]).startswith("https://www.facebook.com/api/graphql/"):
+            response = entry["response"]["content"]
 
-               url = entry["url"]
-               header= entry["headers"]
-               parameters = entry["post_data"]
-
-               links.append(url)
-               headers.append(header)
-               paramets.append(parameters)
-
-   return links, headers, paramets
+            print(response)
 
 
 def turn_numbers(number):
@@ -237,6 +225,7 @@ def get_user_posts(username):
    
    driver, file = Driver.get(f"https://facebook.com/{username}", capture_traffic=True, cookies_fb=True, scroll=True)
    html = driver.page_source
+
    links, headers, paramets = get_Querystring()
 
    rango = range(len(links))
