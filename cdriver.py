@@ -14,42 +14,22 @@ class RequestCapture:
     def __init__(self):
         self.captured_requests = []
     
-    def capture_request(self, request):
-        # Capture request details
+    def request(self, flow):
         request_data = {
-            'url': request.url,
-            'method': request.method,
-            'headers': dict(request.headers),
-            'params': dict(request.params),
+            'url': flow.request.pretty_url,
+            'method': flow.request.method,
+            'headers': dict(flow.request.headers),
+            'params': dict(flow.request.query),
         }
-
-        if request.method == 'POST' and request.body:
+        
+        if flow.request.method == 'POST' and flow.request.content:
             try:
-                request_data['post_data'] = request.body.decode()
+                request_data['post_data'] = flow.request.get_text()
             except:
-                request_data['post_data'] = str(request.body)
+                request_data['post_data'] = str(flow.request.content)
         
-        # Add initial request data to captured list
-        captured_request = {'request': request_data}
-        self.captured_requests.append(captured_request)
-        return len(self.captured_requests) - 1  # Return index to match with the response later
-    
-    def capture_response(self, response, request_index):
-        # Capture response details
-        response_data = {
-            'status_code': response.status_code,
-            'headers': dict(response.headers),
-        }
-
-        try:
-            response_data['content'] = response.text
-        except:
-            response_data['content'] = str(response.content)
+        self.captured_requests.append(request_data)
         
-        # Merge response into the corresponding request entry
-        self.captured_requests[request_index]['response'] = response_data
-        
-        # Write to params.json
         with open('params.json', 'w') as f:
             json.dump(self.captured_requests, f, indent=2)
 
@@ -173,7 +153,8 @@ class Driver:
 
       if capture_traffic:
         mitmproxy_proc = Driver.start_mitmproxy()
-        options.add_argument('--proxy-server=http://127.0.0.1:8080')     
+        options.add_argument('--proxy-server=http://127.0.0.1:8080')
+        #options.add_argument("--blink-settings=imagesEnabled=false")     
 
       elif proxy:
          if type(proxy != list):
