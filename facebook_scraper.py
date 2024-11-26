@@ -13,6 +13,21 @@ import json
 import re
 import csv
 
+def fix_json(json_file):
+   file_path = json_file
+   json_objects = []
+
+   with open(file_path, "r") as file:
+      for line in file:
+         try:
+               # Parse each line as a separate JSON object
+               json_obj = json.loads(line.strip())
+               json_objects.append(json_obj)
+         except json.JSONDecodeError as e:
+               print(f"Error parsing line: {e}")
+
+   return json_objects
+
 def catch_reactions(reactions_i):
 
    like_count = "not found"
@@ -78,9 +93,6 @@ def catch_reactions(reactions_i):
 
    return like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count
 
-
-def extract_json(username, response_text, x):
-      pass
 
 
 def read_logs(username):
@@ -167,17 +179,6 @@ def delete_file(f_path):
 
 
 
-def get_Querystring(filename="params.json"):
-   with open("params.json", "r") as file:
-      json_data = json.load(file)
-
-      for entry in json_data:
-         if str(entry["url"]).startswith("https://www.facebook.com/api/graphql/"):
-            response = entry["response"]["content"]
-
-            print(response)
-
-
 def turn_numbers(number):
    if '\xa0mill.' in number[0]:
       if "seguidores" in number[0]:
@@ -219,15 +220,69 @@ def turn_numbers(number):
       print("Nope")
 
 
+def get_user_cookies_values(file):
+    with open(file, encoding='utf-8') as f:
+        dict_reader = csv.DictReader(f)
+        list_of_dicts = list(dict_reader)
+   
+    return list_of_dicts
+
+
 
 def get_user_posts(username):
    
-   driver, file = Driver.get(f"https://facebook.com/{username}", capture_traffic=True, cookies_fb=True, scroll=True)
+   driver = Driver.get(f"https://facebook.com/{username}", capture_traffic=True, cookies_fb=True, scroll=True)
    html = driver.page_source
 
-   links, headers, paramets = get_Querystring()
+   with open("params.json", "r") as f:
+      json_data = json.load(f)
 
-   rango = range(len(links))
+      pack_data = []
+
+      x = 0
+
+      for entry in json_data:
+         try:
+            if str(entry['type']) == "request":
+               try:
+                  if str(entry['url']).startswith('https://www.facebook.com/api/graphql/'):
+
+                     cookies_fb = get_user_cookies_values("facebook_cookies.csv")
+
+                     cookies_fb_ = {}
+                     for i in cookies_fb:
+                        cookies_fb_[str(i["name"])] = str(i["value"])
+
+                     headers = entry["headers"]
+                     headers["Sec-Fetch-Site"] = "same-origin"
+
+                     r = requests.request("POST", entry["url"], headers=headers, data=entry["payload"], cookies=cookies_fb_)
+
+                     json_data = r.json()
+
+                     print(json_data)
+
+                     with open(f"ouput_link_{x}.txt", "a", newline="") as f:
+                        f.write(json_data)
+
+                     data = fix_json(f"ouput_link_{x}")
+
+                     print(data["data"]["node"]["__typename"])
+
+
+                     x += 1
+
+
+
+
+               except Exception as e:
+                  print(e)
+                  continue
+         except:
+            continue
+
+
+   """ rango = range(len(links))
 
    payload = []
 
@@ -256,7 +311,7 @@ def get_user_posts(username):
             f.write(response.text)
          
    except Exception as e: 
-     print(f'something went wrong :( : {e}')
+     print(f'something went wrong :( : {e}') """
           
 
    
@@ -301,7 +356,8 @@ def main():
 
    delete_file('params.json')
    get_user_posts(username)
-   data = read_logs(username)
+
+   """ data = read_logs(username)
 
    with open(f"{username}_posts_fb.csv", "w", newline="") as f:
       writer = csv.DictWriter(f, fieldnames=["title", "reactions_count", "like_count", "love_count", "care_count", "haha_count", "surprise_count", "sad_count", "angry_count", "comments_count", "comments", "is_video"])
@@ -309,7 +365,7 @@ def main():
 
       for d in data:
 
-         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]})
+         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]}) """
 
 if __name__ == "__main__":
    main()

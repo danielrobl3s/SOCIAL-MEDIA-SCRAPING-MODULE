@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import subprocess
 from mitmproxy import ctx
 import json
@@ -9,31 +10,6 @@ from csv import DictReader
 
 import random, time, zipfile
 from selenium_stealth import stealth
-
-class RequestCapture:
-    def __init__(self):
-        self.captured_requests = []
-    
-    def request(self, flow):
-        request_data = {
-            'url': flow.request.pretty_url,
-            'method': flow.request.method,
-            'headers': dict(flow.request.headers),
-            'params': dict(flow.request.query),
-        }
-        
-        if flow.request.method == 'POST' and flow.request.content:
-            try:
-                request_data['post_data'] = flow.request.get_text()
-            except:
-                request_data['post_data'] = str(flow.request.content)
-        
-        self.captured_requests.append(request_data)
-        
-        with open('params.json', 'w') as f:
-            json.dump(self.captured_requests, f, indent=2)
-
-
 
 
 class Driver:
@@ -126,20 +102,14 @@ class Driver:
    
     return list_of_dicts
    
-   @staticmethod
-   def start_mitmproxy():
-       print("Starting mitmproxy...")
-       mitmproxy_proc = subprocess.Popen(['mitmdump', '-s', 'request_capture.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-       return mitmproxy_proc
-   
-   @staticmethod
-   def stop_mitmproxy(mitmproxy_proc):
-       print("Stopping mitmproxy...")
-       mitmproxy_proc.terminate()
-       mitmproxy_proc.wait()
 
    @staticmethod
    def get(url='https://google.com', headless=False, proxy=False, scroll=False, cookies_fb=False, cookies_tk=False, capture_traffic=False):
+      
+      capabilities = DesiredCapabilities.CHROME
+
+      capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
+      
       options = Options()
       
       if headless:
@@ -151,12 +121,12 @@ class Driver:
       options.add_experimental_option("excludeSwitches", ["enable-automation"])
       options.add_experimental_option('useAutomationExtension', False)
 
-      if capture_traffic:
-        mitmproxy_proc = Driver.start_mitmproxy()
-        options.add_argument('--proxy-server=http://127.0.0.1:8080')
-        #options.add_argument("--blink-settings=imagesEnabled=false")     
+      options.add_argument("--enable-logging")
+      options.add_argument("--v=1")
+      options.set_capability("goog:loggingPrefs", {"performance": "ALL", "browser": "ALL"})
 
-      elif proxy:
+        
+      if proxy:
          if type(proxy != list):
             raise Exception("Proxy needs to be a list")
          if len(proxy) == 2 or len(proxy) == 4:
@@ -168,6 +138,8 @@ class Driver:
 
       driver_service = Service('chromedriver-mac-arm64/chromedriver')
       driver = webdriver.Chrome(options=options, service=driver_service)
+
+      
       if random.randint(0, 1) == 1:
            w_vendor = 'Intel Inc.'
            render = 'Intel Iris OpenGL Engine'
@@ -177,6 +149,7 @@ class Driver:
 
       stealth(driver, languages=['en-US', 'en', 'de-DE', 'de'], vendor='Google Inc.', platform='x64', webgl_vendor= w_vendor, renderer=render, fix_hairline=True)
       driver.get(url)
+
       time.sleep(random.uniform(0.4, 0.8))
 
       if cookies_tk:
@@ -202,11 +175,60 @@ class Driver:
                 time.sleep(1)
       
       if capture_traffic:
+            
+            # Fetch performance logs
+            log_entries = driver.get_log("performance")
 
-            file = "params.json"
+            traffic_data = []  # List to hold all captured traffic entries
 
-            Driver.stop_mitmproxy(mitmproxy_proc)
+            # Extract headers, payloads, URLs, and other details
+            for entry in log_entries:
+                try:
+                    obj_serialized = entry.get("message")
+                    obj = json.loads(obj_serialized)
+                    message = obj.get("message")
+                    method = message.get("method")
 
-            return driver, file
+                    # Initialize a dictionary for the current traffic entry
+                    traffic_entry = {"method": method}
+
+                    # Capture request details
+                    if method == "Network.requestWillBeSent":
+                        params = message.get("params", {})
+                        request = params.get("request", {})
+                        request_headers = request.get("headers", {})
+                        post_data = request.get("postData", None)  # Contains POST payload if available
+                        url = request.get("url", "")  # URL of the request
+
+                        traffic_entry["type"] = "request"
+                        traffic_entry["url"] = url
+                        traffic_entry["headers"] = request_headers
+                        traffic_entry["payload"] = post_data
+
+                    # Capture response details
+                    elif method == "Network.responseReceived":
+                        response = message.get("params", {}).get("response", {})
+                        response_headers = response.get("headers", {})
+                        url = response.get("url", "")  # URL of the response
+
+                        traffic_entry["type"] = "response"
+                        traffic_entry["url"] = url
+                        traffic_entry["headers"] = response_headers
+
+                    # Append the entry to the traffic data list
+                    traffic_data.append(traffic_entry)
+
+                except Exception as e:
+                    print("Error processing entry:", e)
+
+            # Write the captured traffic data to a JSON file
+            try:
+                with open("params.json", "w") as outfile:
+                    json.dump(traffic_data, outfile, indent=4)
+                print("Traffic data successfully written to 'traffic_data.json'")
+            except Exception as e:
+                print("Error writing to JSON file:", e)
+
+            return driver
       return driver
    
