@@ -3,8 +3,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import subprocess
-from mitmproxy import ctx
 import json
 from csv import DictReader
 
