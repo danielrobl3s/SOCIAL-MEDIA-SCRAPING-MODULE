@@ -136,7 +136,7 @@ class Driver:
             raise Exception("Invalid proxy list")
          
 
-      driver_service = Service('chromedriver-mac-arm64/chromedriver')
+      driver_service = Service('chromedriver-mac-x64/chromedriver')
       driver = webdriver.Chrome(options=options, service=driver_service)
 
       
