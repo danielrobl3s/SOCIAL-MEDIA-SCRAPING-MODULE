@@ -238,13 +238,13 @@ def get_user_posts(username):
       json_data = json.load(f)
 
       pack_data = []
-      like_count = any
-      love_count = any
-      care_count = any
-      haha_count = any
-      surprise_count = any
-      sad_count = any
-      angry_count = any
+      like_count = "not_found"
+      love_count = "not_found"
+      care_count = "not_found"
+      haha_count = "not_found"
+      surprise_count = "not_found"
+      sad_count = "not_found"
+      angry_count = "not_found"
 
       x = 0
 
@@ -360,6 +360,9 @@ def get_user_posts(username):
       
       for j in range(x):
          delete_file(f"ouput_link_{j}.txt")
+
+      for i in range(5):
+         pack_data.pop(i)
       
       print(pack_data)
 
@@ -404,7 +407,7 @@ def get_user_posts(username):
 def get_user(username):
    
 
-   driver, file = Driver.get(f"https://facebook.com/{username}", capture_traffic=True, cookies_fb=True)
+   driver = Driver.get(f"https://facebook.com/{username}", headless=True, capture_traffic=True, cookies_fb=True)
    html = driver.page_source
 
    soup = BeautifulSoup(html, "lxml")
@@ -436,7 +439,7 @@ def get_user(username):
 def main():
    username = input("Introduce the Facebook account you want to scrape: ")
 
-   #get_user(username)
+   get_user(username)
 
    delete_file('params.json')
    posts = get_user_posts(username)

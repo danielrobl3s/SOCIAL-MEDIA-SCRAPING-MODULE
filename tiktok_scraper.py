@@ -172,7 +172,7 @@ def get_tiktok_stats(username):
 
       time.sleep(3)
 
-   lolazo = read_logs(username)
+   """ lolazo = read_logs(username)
 
    json_file = json.loads(lolazo)
    
@@ -208,19 +208,19 @@ def get_tiktok_stats(username):
          "comments": json.dumps(comments) if isinstance(comments, (dict, list)) else comments,
          "created_at": created_at})
 
-   return data
+   return data """
 
 
 def main():
    user = input('introduce yout tiktok account: ')
    data = get_tiktok_stats(user)
    
-   with open(f"{user}_posts_tk.csv", "w", newline="") as f:
+   """ with open(f"{user}_posts_tk.csv", "w", newline="") as f:
       writer = csv.DictWriter(f, fieldnames=["post_id", "caption", "like_count", "comments_count", "comments", "created_at"])
       writer.writeheader()
 
       for d in data:
-         writer.writerow({"post_id": d["post_id"], "caption": d["caption"], "like_count": d["like_count"], "comments_count": d["comments_count"], "comments": d["comments"], "created_at": d["created_at"]})
+         writer.writerow({"post_id": d["post_id"], "caption": d["caption"], "like_count": d["like_count"], "comments_count": d["comments_count"], "comments": d["comments"], "created_at": d["created_at"]}) """
       
 
 

@@ -3,8 +3,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import subprocess
-from mitmproxy import ctx
 import json
 from csv import DictReader
 
@@ -104,7 +102,7 @@ class Driver:
    
 
    @staticmethod
-   def get(url='https://google.com', headless=False, proxy=False, scroll=False, cookies_fb=False, cookies_tk=False, capture_traffic=False):
+   def get(url='https://google.com', headless=False, proxy=False, scroll=False, scroll_tk=False, cookies_fb=False, cookies_tk=False, capture_traffic=False):
       
       capabilities = DesiredCapabilities.CHROME
 
@@ -153,7 +151,7 @@ class Driver:
       time.sleep(random.uniform(0.4, 0.8))
 
       if cookies_tk:
-            cookies_ = Driver.get_user_cookies_values('/Users/postadurango/Desktop/social_media_scraping/tiktok_session.csv')
+            cookies_ = Driver.get_user_cookies_values('tiktok_cookies.csv')
 
             for i in cookies_:
                  driver.add_cookie(i)
@@ -173,6 +171,12 @@ class Driver:
             for _ in range(50):  
                 actions.send_keys('\ue00f').perform() 
                 time.sleep(1)
+        
+      if scroll_tk:
+            actions = ActionChains(driver)
+            for _ in range(random.randint(15)):  
+                actions.send_keys('\ue00f').perform() 
+                time.sleep(random.randint(0, 4))
       
       if capture_traffic:
             
@@ -225,7 +229,7 @@ class Driver:
             try:
                 with open("params.json", "w") as outfile:
                     json.dump(traffic_data, outfile, indent=4)
-                print("Traffic data successfully written to 'traffic_data.json'")
+                print("Traffic data successfully written to 'params.json'")
             except Exception as e:
                 print("Error writing to JSON file:", e)
 
