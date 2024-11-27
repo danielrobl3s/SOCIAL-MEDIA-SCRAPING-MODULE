@@ -258,17 +258,62 @@ def get_user_posts(username):
 
                      r = requests.request("POST", entry["url"], headers=headers, data=entry["payload"], cookies=cookies_fb_)
 
-                     json_data = r.json()
-
-                     print(json_data)
+                     json_data = r.text
 
                      with open(f"ouput_link_{x}.txt", "a", newline="") as f:
                         f.write(json_data)
 
-                     data = fix_json(f"ouput_link_{x}")
+                     file_path = f"ouput_link_{x}.txt"
+                     json_objects = []
 
-                     print(data["data"]["node"]["__typename"])
+                     with open(file_path, "r") as file:
+                        for line in file:
+                           try:
+                                 # Parse each line as a separate JSON object
+                                 json_obj = json.loads(line.strip())
+                                 json_objects.append(json_obj)
+                           except json.JSONDecodeError as e:
+                                 print(f"Error parsing line: {e}")
 
+                     # Process your list of JSON objects
+                     try:
+                        print(json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["content"]["story"]["message"]["text"])
+                     except:
+                        print("not_found")
+
+                     try:
+                        print(json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["reaction_count"]["count"])
+                     except:
+                        print("not_found")
+
+                     try:
+                        reactions = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["top_reactions"]["edges"]
+                        like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count = catch_reactions(reactions)
+
+                        print("Like count: "+str(like_count) + "\n"+
+                              "love count: "+str(love_count) + "\n"+
+                              "care_count: "+str(care_count) + "\n"+
+                              "haha_count: "+str(haha_count) + "\n"+
+                              "surprise_count: "+str(surprise_count) + "\n"+
+                              "sad_count: "+str(sad_count) + "\n"+
+                              "angry_count: "+str(angry_count))
+                     except:
+                        print("not_found")
+
+                     try:
+                        print("comments_count: " + str(json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comment_rendering_instance"]["comments"]["total_count"]))
+                     except:
+                        print("nel perro")
+
+                     try:
+                        comments = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"]["comment"]["body"]["text"]
+                        user_that_commented = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"]["comment"]["author"]["name"]
+
+                        commentz = {"user_that_commented": user_that_commented, "comment": comments}
+                        print(commentz)
+                     except:
+                        commentz = "not_found"
+                        print(commentz)
 
                      x += 1
 
@@ -280,6 +325,9 @@ def get_user_posts(username):
                   continue
          except:
             continue
+      
+      for j in range(x):
+         delete_file(f"ouput_link_{j}.txt")
 
 
    """ rango = range(len(links))
