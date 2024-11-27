@@ -3,8 +3,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import subprocess
-from mitmproxy import ctx
 import json
 from csv import DictReader
 
@@ -136,7 +134,7 @@ class Driver:
             raise Exception("Invalid proxy list")
          
 
-      driver_service = Service('chromedriver-mac-x64/chromedriver')
+      driver_service = Service('chromedriver-win64/chromedriver.exe')
       driver = webdriver.Chrome(options=options, service=driver_service)
 
       

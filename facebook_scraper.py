@@ -92,78 +92,6 @@ def catch_reactions(reactions_i):
             pass
 
    return like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count
-
-
-
-def read_logs(username):
-   i = range(0,51)
-
-   pack_data = []
-
-   for x in i:
-
-      try:
-         with open(f'{username}_output_{x}.json', 'r') as f:
-
-            data = json.load(f)
-                
-            try:   
-               title = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["content"]["story"]["message"]["text"]
-            except:
-               title = "not found"
-
-
-            try:
-               reactions_count = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["reaction_count"]["count"]
-            except:
-               reactions_count = "not found"
-
-            
-            reactions_i = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["top_reactions"]["edges"]
-
-            like_count, love_count, care_count, haha_count, surprise_count, sad_count, angry_count = catch_reactions(reactions_i)
-
-            try:   
-               comments_count = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comment_rendering_instance"]["comments"]["total_count"]
-            except:
-               comments_count = "not found"
-
-
-            try:
-               comments =  data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["body"]["text"]
-               user_that_commented = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["author"]["name"]
-
-               commentz = {"user_that_commented": user_that_commented, "comment": comments}
-            except:
-               commentz = "not found"
-            
-
-            is_video = data["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["video_view_count"]
-            if is_video == None:
-               is_video = False
-            else:
-               is_video = True
-         
-            pack_data.append({
-               "title": str(title),
-               "reactions_count": reactions_count,
-               "like_count": like_count,
-               "love_count": love_count,
-               "care_count": care_count,
-               "haha_count": haha_count,
-               "surprise_count": surprise_count,
-               "sad_count": sad_count,
-               "angry_count": angry_count,
-               "comments_count": comments_count,
-               "comments": str(commentz),
-               "is_video": is_video
-            })
-         
-
-      except Exception as e:
-         print("No existing file in here: "+str(e))
-
-   return pack_data
    
 
 
@@ -366,41 +294,6 @@ def get_user_posts(username):
       return pack_data
 
 
-   """ rango = range(len(links))
-
-   payload = []
-
-   try:
-      for x in rango:
-         print(x)
-
-         print(headers)
-
-            # Convert headers to a dictionary
-         header = headers[x]
-
-         #print(links[x], header, params)
-
-         if "Accept-Encoding" in header:
-            header.pop('Accept-Encoding')
-            print(header)
-
-         print(header)
-         
-         response = requests.request("POST", url=links[x], headers=headers[x], data=paramets[x])
-         
-         json_data = json.loads(response.text)
-
-         with open(f"{username}_output_{x}", "w", newline="") as f:
-            f.write(response.text)
-         
-   except Exception as e: 
-     print(f'something went wrong :( : {e}') """
-          
-
-   
-
-
 def get_user(username):
    
 
@@ -442,16 +335,6 @@ def main():
    posts = get_user_posts(username)
 
    print(posts)
-
-   """ data = read_logs(username)
-
-   with open(f"{username}_posts_fb.csv", "w", newline="") as f:
-      writer = csv.DictWriter(f, fieldnames=["title", "reactions_count", "like_count", "love_count", "care_count", "haha_count", "surprise_count", "sad_count", "angry_count", "comments_count", "comments", "is_video"])
-      writer.writeheader()
-
-      for d in data:
-
-         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]}) """
 
 if __name__ == "__main__":
    main()
