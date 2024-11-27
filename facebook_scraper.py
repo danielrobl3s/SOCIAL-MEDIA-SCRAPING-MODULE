@@ -231,7 +231,7 @@ def get_user_cookies_values(file):
 
 def get_user_posts(username):
    
-   driver = Driver.get(f"https://facebook.com/{username}", capture_traffic=True, cookies_fb=True, scroll=True)
+   driver = Driver.get(f"https://facebook.com/{username}", headless=True, capture_traffic=True, cookies_fb=True, scroll=True)
    html = driver.page_source
 
    with open("params.json", "r") as f:
