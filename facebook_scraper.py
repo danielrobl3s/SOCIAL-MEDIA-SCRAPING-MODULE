@@ -297,6 +297,7 @@ def get_user_posts(username):
                               "surprise_count: "+str(surprise_count) + "\n"+
                               "sad_count: "+str(sad_count) + "\n"+
                               "angry_count: "+str(angry_count))
+                        
                      except:
                         print("not_found")
 
@@ -306,8 +307,8 @@ def get_user_posts(username):
                         print("nel perro")
 
                      try:
-                        comments = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"]["comment"]["body"]["text"]
-                        user_that_commented = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"]["comment"]["author"]["name"]
+                        comments = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["body"]["text"]
+                        user_that_commented = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["author"]["name"]
 
                         commentz = {"user_that_commented": user_that_commented, "comment": comments}
                         print(commentz)
@@ -315,6 +316,15 @@ def get_user_posts(username):
                         commentz = "not_found"
                         print(commentz)
 
+                     try:
+                        is_video = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["video_view_count"]
+                        if is_video == None:
+                           is_video = False
+                        else:
+                           is_video = True
+                        print("is video? " + str(is_video))
+                     except:
+                        print("is video?: not_found")
                      x += 1
 
 
