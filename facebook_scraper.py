@@ -238,6 +238,13 @@ def get_user_posts(username):
       json_data = json.load(f)
 
       pack_data = []
+      like_count = any
+      love_count = any
+      care_count = any
+      haha_count = any
+      surprise_count = any
+      sad_count = any
+      angry_count = any
 
       x = 0
 
@@ -277,14 +284,14 @@ def get_user_posts(username):
 
                      # Process your list of JSON objects
                      try:
-                        print(json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["content"]["story"]["message"]["text"])
+                        title = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["content"]["story"]["message"]["text"]
                      except:
-                        print("not_found")
+                        title = "not_found"
 
                      try:
-                        print(json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["reaction_count"]["count"])
+                        reactions_count = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["reaction_count"]["count"]
                      except:
-                        print("not_found")
+                        reactions_count = "not_found"
 
                      try:
                         reactions = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["top_reactions"]["edges"]
@@ -299,22 +306,20 @@ def get_user_posts(username):
                               "angry_count: "+str(angry_count))
                         
                      except:
-                        print("not_found")
+                        pass
 
                      try:
-                        print("comments_count: " + str(json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comment_rendering_instance"]["comments"]["total_count"]))
+                        comments_count = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comment_rendering_instance"]["comments"]["total_count"]
                      except:
-                        print("nel perro")
+                        comments_count = "not_found"
 
                      try:
                         comments = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["body"]["text"]
                         user_that_commented = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["interesting_top_level_comments"][0]["comment"]["author"]["name"]
 
                         commentz = {"user_that_commented": user_that_commented, "comment": comments}
-                        print(commentz)
                      except:
                         commentz = "not_found"
-                        print(commentz)
 
                      try:
                         is_video = json_objects[0]["data"]["node"]["timeline_list_feed_units"]["edges"][0]["node"]["comet_sections"]["feedback"]["story"]["story_ufi_container"]["story"]["feedback_context"]["feedback_target_with_context"]["comet_ufi_summary_and_actions_renderer"]["feedback"]["video_view_count"]
@@ -322,10 +327,27 @@ def get_user_posts(username):
                            is_video = False
                         else:
                            is_video = True
-                        print("is video? " + str(is_video))
+
                      except:
-                        print("is video?: not_found")
+                        is_video = "not_found"
+
+                     pack_data.append({
+                        "title": str(title),
+                        "reactions_count": reactions_count,
+                        "like_count": like_count,
+                        "love_count": love_count,
+                        "care_count": care_count,
+                        "haha_count": haha_count,
+                        "surprise_count": surprise_count,
+                        "sad_count": sad_count,
+                        "angry_count": angry_count,
+                        "comments_count": comments_count,
+                        "comments": str(commentz),
+                        "is_video": is_video
+                     })
                      x += 1
+
+
 
 
 
@@ -338,6 +360,10 @@ def get_user_posts(username):
       
       for j in range(x):
          delete_file(f"ouput_link_{j}.txt")
+      
+      print(pack_data)
+
+      return pack_data
 
 
    """ rango = range(len(links))
@@ -413,7 +439,9 @@ def main():
    #get_user(username)
 
    delete_file('params.json')
-   get_user_posts(username)
+   posts = get_user_posts(username)
+
+   print(posts)
 
    """ data = read_logs(username)
 
