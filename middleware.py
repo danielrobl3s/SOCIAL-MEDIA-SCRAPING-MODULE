@@ -35,9 +35,10 @@ def read_json(file):
 
 
 def get_user_cookies(username):
-   driver, file = Driver.get(f"https://tiktok.com/@{username}", headless=False, capture_har=True, cookies=True)
-   
-   print(driver.page_source)
+   Driver.get(f"https://tiktok.com/@{username}", headless=False, capture_traffic=True, cookies_tk=True, scroll=True)
+   file = "params.json"
+
+   time.sleep(100)
 
    return file
 
@@ -50,21 +51,28 @@ def get_queryString(username):
    file= get_user_cookies(username)
    params = read_json(file)
 
-   entries = params['log']['entries']
+   print(params)
 
    url = any
    query_string = any
 
    links = []
 
-   for entry in entries:
+
+   for entry in params:
+
+      print(entry)
+
+      try:
       
-      if str(entry['request']['url']).startswith('https://www.tiktok.com/api/post/item_list/'):
+         if entry['url'].startswith('https://www.tiktok.com/api/post/item_list/'):
 
-         url = entry['request']['url']
-         #query_string = entry['request']['queryString']
+            url = entry['url']
+            #query_string = entry['request']['queryString']
 
-         links.append(url)
+            links.append(url)
+      except:
+         continue
 
    return links
 
