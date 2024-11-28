@@ -168,7 +168,7 @@ class Driver:
 
       if scroll:
             actions = ActionChains(driver)
-            for _ in range(50):  
+            for _ in range(70):  
                 actions.send_keys('\ue00f').perform() 
                 time.sleep(1)
         

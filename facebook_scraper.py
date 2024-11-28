@@ -444,17 +444,13 @@ def main():
    delete_file('params.json')
    posts = get_user_posts(username)
 
-   print(posts)
-
-   """ data = read_logs(username)
-
    with open(f"{username}_posts_fb.csv", "w", newline="") as f:
       writer = csv.DictWriter(f, fieldnames=["title", "reactions_count", "like_count", "love_count", "care_count", "haha_count", "surprise_count", "sad_count", "angry_count", "comments_count", "comments", "is_video"])
       writer.writeheader()
 
-      for d in data:
+      for d in posts:
 
-         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]}) """
+         writer.writerow({"title":d["title"], "reactions_count": d["reactions_count"], "like_count": d["like_count"], "love_count": d["love_count"], "care_count": d["care_count"], "haha_count": d["haha_count"], "surprise_count": d["surprise_count"], "sad_count": d["sad_count"], "angry_count": d["angry_count"], "comments_count": d["comments_count"], "comments": d["comments"], "is_video": d["is_video"]})
 
 if __name__ == "__main__":
    main()
