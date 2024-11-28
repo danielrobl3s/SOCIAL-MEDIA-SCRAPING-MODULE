@@ -270,7 +270,11 @@ def main():
 
   print(postes)
     
+<<<<<<< HEAD
   with open(f'{username}_posts_ig.csv', 'w', newline='', encoding='utf-8') as file:
+=======
+  with open(f'{username}.csv', 'w', newline='', encoding='utf-8') as file:
+>>>>>>> 61cf990914308a9f023197e319b064d108bf3266
     writer = csv.DictWriter(file, fieldnames=['title', 'likes_count', 'comment_count', 'comments', 'is_video?', 'taken_at'])
     writer.writeheader()
 
