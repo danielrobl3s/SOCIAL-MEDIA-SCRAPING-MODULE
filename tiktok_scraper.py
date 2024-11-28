@@ -97,18 +97,9 @@ def get_user_posts_tk(username, url):
 
    payload = {}
    headers = {
-  'Accept': '*/*',
-  'Accept-Language': 'es-419,es;q=0.9',
-  'Connection': 'keep-alive',
-  'Cookie': 'tt_chain_token=a3rp+Clgceg1A6CA6HL62Q==; delay_guest_mode_vid=5; passport_csrf_token=4075af0f2aa93479a593d1a1c92a84d7; passport_csrf_token_default=4075af0f2aa93479a593d1a1c92a84d7; store-country-code-src=uid; last_login_method=google; _ttp=2n839FwqLfjSWs2zyIBIT3hxxSo; multi_sids=7398293910891021318%3A5803ccf7963c0aa6bcba8da2929ec88f; cmpl_token=AgQQAPNGF-RO0raS67q-qp0__WBwkzCJf4TNYNQuuw; passport_auth_status=bfd1cfabe87a783e79b1fa45d72987bd%2C3ce19fa6bc422fcf294e9258341d037b; passport_auth_status_ss=bfd1cfabe87a783e79b1fa45d72987bd%2C3ce19fa6bc422fcf294e9258341d037b; sid_guard=5803ccf7963c0aa6bcba8da2929ec88f%7C1729018505%7C15552000%7CSun%2C+13-Apr-2025+18%3A55%3A05+GMT; uid_tt=0adc6b2a2da3a84728542b6b93a105a7d273bde0eb06493c1eb45020b8adb6c2; uid_tt_ss=0adc6b2a2da3a84728542b6b93a105a7d273bde0eb06493c1eb45020b8adb6c2; sid_tt=5803ccf7963c0aa6bcba8da2929ec88f; sessionid=5803ccf7963c0aa6bcba8da2929ec88f; sessionid_ss=5803ccf7963c0aa6bcba8da2929ec88f; sid_ucp_v1=1.0.0-KDM5Nzc3ODBkOTZlMmVlZjEzNmMzY2FhZTY0ZThhNDk2ZTU4Nzg1NDUKIQiGiOG006OB1mYQifW6uAYYswsgDDC_irC1BjgIQBJIBBADGgZtYWxpdmEiIDU4MDNjY2Y3OTYzYzBhYTZiY2JhOGRhMjkyOWVjODhm; ssid_ucp_v1=1.0.0-KDM5Nzc3ODBkOTZlMmVlZjEzNmMzY2FhZTY0ZThhNDk2ZTU4Nzg1NDUKIQiGiOG006OB1mYQifW6uAYYswsgDDC_irC1BjgIQBJIBBADGgZtYWxpdmEiIDU4MDNjY2Y3OTYzYzBhYTZiY2JhOGRhMjkyOWVjODhm; store-idc=maliva; store-country-code=mx; tt-target-idc=useast1a; tt-target-idc-sign=T5P0nLa__cUlAufJC-yvMveX0L1dMaeNfMAiRRqG4RTQd9dru_mtnje89EAiyFGd_xtaW6_Cbj8XiHNTB2DQYULlJL-73fMRO5KxdZ30RoTAp-oUkHm0hPeYDLrCDHeWvllu9SW0wmE3oDfn_D9ZmuZUwdeNY1X72jecdQM7NpNkqZWMH1s7D1NX1__LMcDRvRsXaWE0swEBYHOCGeStm_S0tAiPOKX8qHqG_s9vtuEg8_YMHptjpPy9FQx3FpN4gRLazaQjvGcqInGkqFsM7oYfRwPk4q-7u1XazKB1y9mVTjXTvN3pyj409FV2zPFnaQe4RK87abIdwXgfiWfN5trAYbzdc_fboghqtKBN3fc1RmQ-QjCpe_zzeGETJpXdVpT9k3W8b3JAvnYRD-423V0vtsJvjCnp3drT9K-mx5xgF_YxMT0SYgLYEtFs1pXwr1VAmIiWgaHgY6Gi-KB5o_vBZhaBF1LTWW1HFo86ihTeW0BPxJlwJO253m62nHsy; tiktok_webapp_theme_source=auto; tiktok_webapp_theme=dark; tt_csrf_token=ef08ZCen-W-f1qOBRLt80l9UocyCLiqYKD20; ak_bmsc=782E47B3EF8654E8DA7E684714D24C4F~000000000000000000000000000000~YAAQ0wzGFyUkbrWSAQAAlwnjvBnwhoy63CnL4HmoiW0GE7941iEe2ylaokYGhFTMpXb5Gf54yLhIOyyOCQVftwYFULDrxEutQc2jrh/pBWV3Jiwfj+SEuSyqN1Y6P9Q9nJ2AHy6P4x560wjf6qcwqQpL3jG2tf6b+YoMR1FNx3azVRTDwPBHi0UeUZeDP5APWIicjPyhc+DzZJzGcjDs6MOZWhkgVajAtQNZd2NOJgdl9fS7Xk+doJRDyE0smLCOm6aLs6k/MXgvi5fm1bHgC//hWmIyi0pPOBMYN0fJkbARRJEZpSx5utexCGH7a2PKZ+XiRIANK4E/ThTvZruHTSFhKV34zQR6y5/bQCnGIXJLgwnoQD8vvBqowQFyk1/p; msToken=EYBy2DYwNKGeJCJrjd2WBhoN7lc8W0DFm566IOPizuSwXZwstVMrKUBuzPP490C3yGAYmOrZByNa1Xh4FJ4zIqY8-5srqpjn0oUEBaTpgfT5X3VE6ZV3sH5KnZKJGKz9qdJ6jZdXyaEYBxo=; msToken=lzEsyVTi106IYEEsA02pVurfQpE8naa9vCI9h81uyjuLAQ05sFz8siqr1KtMN5oSAtXJ6uTyT9Z2JBEH5aTfQLFtl7467V6NBywRxDZJIk_HhXzN9IFaWgUjH44pW43jTXJhtfm5N8Dbdp0=; bm_sv=8EAC532582BDB9977CBD96F1FBEAEE1B~YAAQzwzGFyPcarWSAQAAl9/rvBnzS74glf9uBiZjPw2UcH6bK5vIiJdLmQqE/Cj16xM9eX1dsyVb+Uw2klpk4Q5HxQF49V3uaoe1i2HHCwgJZFRH4QL2mJXMbKqWKioDaAEyYc/sfu6V48dTCAS13QffydCHDvMwI98kcLxyZzL12tDGyinh3kAivKACeO2gx4Lz1MCE63zvHAnPh/hC4ksBS+LbT9qk/bEDwwbJ0Rq+zPq0AQO2N28aW98Bp7Uo~1; passport_fe_beating_status=true; ttwid=1%7CCfpB8i4ul6kmCIOwyorYXVEM-NSETzbrhXBxm_CFeew%7C1729746428%7C3ce798e739dd3c53d088b1a87baa6ddf68137f03f09e810766aef14d336cd2ad; odin_tt=6c67c245393123afedbea2de794a1044743065b83da260353d7500cde0e55fecdc6528186ccfbea530a061bb7127eabf224e92a4e18649133d15058d7b681dfd; msToken=fvH0Yi6f8EJkuY-5Xt1b5vpWT_r8StNj8MrIV6EUWJlbdJXxHlBdo5bti6dJHzThX0Rai1XYRup1Z6o5Q-7GfB273ncsdnwI9hlkAkFSDNUK66zukeiuDYUN2emngkFRn7IewgcJTRrXJrEtIw==; odin_tt=1f5f17f3994b3d8b4f2c2bb696eedcb08dd3c1c4b63231e18c4106c8c7885b686206b1405fbf59fc0e8b3500425e1d2c7250b1044efa76514ccafc24ac66c55884836b8467e43c1e856013ac5a9d0753; store-country-code=mx; store-country-code-src=uid; store-idc=maliva; tt-target-idc=useast1a',
+  'Accept-Language': 'en-US,en;q=0.9,de-DE;q=0.8,de;q=0.7',
   'Referer': f'https://www.tiktok.com/@{username}',
-  'Sec-Fetch-Dest': 'empty',
-  'Sec-Fetch-Mode': 'cors',
-  'Sec-Fetch-Site': 'same-origin',
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-  'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
-  'sec-ch-ua-mobile': '?0',
-  'sec-ch-ua-platform': '"macOS"'
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
 }
 
    response = requests.request("GET", url, headers=headers, data=payload)
@@ -208,12 +199,16 @@ def get_tiktok_stats(username):
          "comments": json.dumps(comments) if isinstance(comments, (dict, list)) else comments,
          "created_at": created_at})
 
-   return data
+   return data, i
 
 
 def main():
    user = input('introduce yout tiktok account: ')
-   data = get_tiktok_stats(user)
+   data, i = get_tiktok_stats(user)
+
+   for f in range(i):
+      delete_file(f'{user}_output_link_{f}.json')
+   
    
    with open(f"{user}_posts_tk.csv", "w", newline="") as f:
       writer = csv.DictWriter(f, fieldnames=["post_id", "caption", "like_count", "comments_count", "comments", "created_at"])
