@@ -136,18 +136,18 @@ def get_similar_users(username):
 
   url = "https://www.instagram.com/graphql/query"
 
-  payload = f'av=17841465245145777&__d=www&__user=0&__a=1&__req=5&__hs=20039.HYP%3Ainstagram_web_pkg.2.1..0.1&dpr=2&__ccg=GOOD&__rev=1018135819&__s=agspyf%3A5qox7s%3Aqc1kn6&__hsi=7436511599758828553&__dyn=7xe5WwlEnwn8K2Wmm1twpUnwgU7S6EdF8aUco38w5ux60p-0LVE4W0qa0FE2awgo9o1vohwGwQwoEcE2ygao1aU2swbOU2zxe2GewGw9a361qw8W5U4q08HwSyES1Twoob82ZwrUdUbGw4mwr86C1mwrd6goK10xKi2K7E5yqcxK2K0Pay9olxG&__csr=gzd2sv2y4YGMBjtF3eGhrIIzWBGThd2WhpFaHVKi9J4HQbJypaF7FJei8XgphECFAeChFokheEWuaBwwwUAzbBgjxeEcqCK5omy8iGchpUnx-U5Pw056Hw2dU2vU2yw7sw1v60tWpo3uwdN03ok0Cy4DgHc0g9FbU5Gh046g6h08O1ixjw6FDwuIM0z90PwCw0uyo&__comet_req=7&fb_dtsg=NAcMmbyLxfTz9Y22XxyTiC3k5jtAIqicfuq-COKwQ2EzNDbJ3lMk5RQ%3A17865068956001195%3A1731441550&jazoest=26306&lsd=zO9_XxovaXZt2pHh4y_u1X&__spin_r=1018135819&__spin_b=trunk&__spin_t=1731447782&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=PolarisProfileSuggestedUsersWithPreloadableQuery&variables=%7B%22module%22%3A%22profile%22%2C%22target_id%22%3A%22{user_id}%22%7D&server_timestamps=true&doc_id=7871693226285927'
+  payload = f'av=17841465245145777&__d=www&__user=0&__a=1&__req=5&__hs=20055.HYP%3Ainstagram_web_pkg.2.1..0.1&dpr=2&__ccg=GOOD&__rev=1018524652&__s=dpzvue%3Ayjtgwn%3A15o3r3&__hsi=7442471660658494731&__dyn=7xe5WwlEnwn8K2Wmm1twpUnwgU7S6EdF8aUco38w5ux60p-0LVE4W0qa0FE2awgo9o1vohwGwQwoEcE2ygao1aU2swbOU2zxe2GewGw9a361qw8W5U4q08HwSyES1Twoob82ZwrUdUbGw4mwr86C1mwrd6goK10xKi2K7E5yqcxK2K0Pay9olw&__csr=gN1j5jgABdkplOEJ2Lh4qGTnQRGjpWKlaHKZpbGahKuEPQHCDiGHKcKhpaEVHx2bVVojpbyoGi8homhUbEy8zrx2qEWUTKdK5ppoOFKHwhVo-jxq14wYxC2G00k2u1owq8bU5y0mm0ix07Nwde1Yw0w3yy0di1ag0UIMO2l0Ezi05NgdQA7okF1y0woG9w9W7S4o5Cuaw2jQ30UC081wF81cw081m04y8&__comet_req=7&fb_dtsg=NAcOUhIaOzlUf0P7sQ1A3pWGKsAwzuJfl8AOvpDG5nghSZ6k3XFWGJA%3A17854231342124680%3A1731707011&jazoest=26167&lsd=a4dFmx1BG9nWg7z8IiaHNb&__spin_r=1018524652&__spin_b=trunk&__spin_t=1732835467&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=PolarisProfileSuggestedUsersWithPreloadableQuery&variables=%7B%22module%22%3A%22profile%22%2C%22target_id%22%3A%22{user_id}%22%7D&server_timestamps=true&doc_id=7821202981316111'
   headers = {
     'accept': '*/*',
     'accept-language': 'es-419,es;q=0.9',
     'content-type': 'application/x-www-form-urlencoded',
-    'cookie': 'datr=WVQEZ9otxSdrW3lboj2lt3LI; ig_did=B52CEFC3-E13F-469D-AAAD-5C5C929934B3; ps_l=1; ps_n=1; fbm_124024574287414=base_domain=.instagram.com; ig_nrcb=1; ds_user_id=65086222838; mid=ZwnBuAAEAAFm6J_c-xCpyilfm6QG; csrftoken=6soCvmV41IwO45SkVJHxJ4m5mccbkVWU; sessionid=65086222838%3Aaiqp2zgF6cmrVt%3A10%3AAYd2jxmFAPhZtVitnK-x_U7NF5cqc3hEeEGYNYYPBQ; rur="CCO\\05465086222838\\0541762983775:01f7b96738a8b7008458ae1d3653e5f106622d99a768b5f120e71c48ef96f6a4d61dc959"; wd=576x788; csrftoken=kFP5Pxdr4yd7Jpzd0Be9XJMxAVDWoehc; ds_user_id=65086222838; rur="CCO\\05465086222838\\0541762984178:01f75067b870c94e011547de37249647e7618ce506717c6c505397015fcbbc1d467d4525"',
+    'cookie': 'datr=WVQEZ9otxSdrW3lboj2lt3LI; ig_did=B52CEFC3-E13F-469D-AAAD-5C5C929934B3; ps_l=1; ps_n=1; fbm_124024574287414=base_domain=.instagram.com; ig_nrcb=1; mid=ZwnBuAAEAAFm6J_c-xCpyilfm6QG; csrftoken=h2cijQMam3xFmBTgqyu5bf8ZUo3DlRUp; ds_user_id=65086222838; sessionid=65086222838%3AFRbJdTXlQ5au6Q%3A26%3AAYcdj8qdRR8SNcYcaUNfHumpbkMxUJSk2K6YO7g7og; rur="CCO\\05465086222838\\0541764371456:01f7683cba397476b9d62c2364d91bac938734a3b22bb42d44abf785fca2cbffe7fd66ff"; wd=576x754; csrftoken=kFP5Pxdr4yd7Jpzd0Be9XJMxAVDWoehc; ds_user_id=65086222838; rur="CCO\\05465086222838\\0541764371518:01f704645c65a8aaec01654b4c48cc746069a3cef9946c460a9a1a62883e01126af1877a"',
     'origin': 'https://www.instagram.com',
     'priority': 'u=1, i',
     'referer': f'https://www.instagram.com/{username}/',
     'sec-ch-prefers-color-scheme': 'dark',
-    'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
-    'sec-ch-ua-full-version-list': '"Chromium";v="130.0.6723.117", "Google Chrome";v="130.0.6723.117", "Not?A_Brand";v="99.0.0.0"',
+    'sec-ch-ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'sec-ch-ua-full-version-list': '"Google Chrome";v="131.0.6778.86", "Chromium";v="131.0.6778.86", "Not_A Brand";v="24.0.0.0"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-model': '""',
     'sec-ch-ua-platform': '"macOS"',
@@ -155,17 +155,16 @@ def get_similar_users(username):
     'sec-fetch-dest': 'empty',
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
-    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
     'x-asbd-id': '129477',
-    'x-bloks-version-id': 'e1fd61b61b6cc0cc0dfebb9a7efa1f1d98668083dc2f460373797fba9f8ec065',
-    'x-csrftoken': '6soCvmV41IwO45SkVJHxJ4m5mccbkVWU',
+    'x-bloks-version-id': 'bf7a90e9c6e23a385cfb6253e5eeb5d72806040868912d5bef7cec02fd3630c5',
+    'x-csrftoken': 'h2cijQMam3xFmBTgqyu5bf8ZUo3DlRUp',
     'x-fb-friendly-name': 'PolarisProfileSuggestedUsersWithPreloadableQuery',
-    'x-fb-lsd': 'zO9_XxovaXZt2pHh4y_u1X',
+    'x-fb-lsd': 'a4dFmx1BG9nWg7z8IiaHNb',
     'x-ig-app-id': '936619743392459'
   }
 
   response = requests.request("POST", url, headers=headers, data=payload)
-
 
   r = response.json()
 
@@ -287,10 +286,6 @@ def main():
 
     for user in users:
       writer.writerow({'username': user['username'], 'pk': user['pk']})
-    
-    
-
-  #print(similar_users)
 
 
 

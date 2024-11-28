@@ -361,8 +361,8 @@ def get_user_posts(username):
       for j in range(x):
          delete_file(f"ouput_link_{j}.txt")
 
-      for i in range(5):
-         pack_data.pop(i)
+      """ for i in range(5):
+         pack_data.pop(i) """
       
       print(pack_data)
 
